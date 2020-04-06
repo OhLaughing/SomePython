@@ -10,15 +10,9 @@ x=narray[:,0]
 y=narray[:,1]
 for i in range(0,len(label)):
     if(label[i]==1):
-        t=[]
-        t.append(x[i])
-        t.append(y[i])
-        good.append(t)
+        good.append([x[i], y[i]])
     elif(label[i]==-1):
-        t = []
-        t.append(x[i])
-        t.append(y[i])
-        bad.append(t)
+        bad.append([x[i], y[i]])
 good=np.array(good)
 bad=np.array(bad)
 

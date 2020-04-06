@@ -119,8 +119,9 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
             # 步骤1：计算误差Ei
             # multiply(a,b)就是个乘法，如果a,b是两个数组，那么对应元素相乘
             # .T为转置
+            # 7.104 预测值
             fxi = float(np.multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[i, :].T)) + b
-            # 误差项计算公式
+            # 误差项计算公式 7.105
             Ei = fxi - float(labelMat[i])
             # 优化alpha，设定一定的容错率
             if((labelMat[i] * Ei < -toler) and (alphas[i] < C)) or ((labelMat[i] * Ei > toler) and (alphas[i] > 0)):
@@ -141,23 +142,23 @@ def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
                     L = max(0, alphas[j] + alphas[i] - C)
                     H = min(C, alphas[j] + alphas[i])
                 if(L == H):
-                    print("L == H")
+                    print("L == H:" + str(L))
                     continue
-                # 步骤3：计算eta
+                # 步骤3：计算eta P146: 2K12-K11-K22
                 eta = 2.0 * dataMatrix[i, :] * dataMatrix[j, :].T - dataMatrix[i, :] * dataMatrix[i, :].T - dataMatrix[j, :] * dataMatrix[j, :].T
                 if eta >= 0:
                     print("eta>=0")
                     continue
-                # 步骤4：更新alpha_j
+                # 步骤4：更新alpha_j P146
                 alphas[j] -= labelMat[j] * (Ei - Ej) / eta
                 # 步骤5：修剪alpha_j
                 alphas[j] = clipAlpha(alphas[j], H, L)
                 if(abs(alphas[j] - alphaJold) < 0.00001):
                     print("alpha_j变化太小")
                     continue
-                # 步骤6：更新alpha_i
+                # 步骤6：更新alpha_i 7.109
                 alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])
-                # 步骤7：更新b_1和b_2
+                # 步骤7：更新b_1和b_2 7.115&7.116
                 b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i, :] * dataMatrix[i, :].T - labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[j, :] * dataMatrix[i, :].T
                 b2 = b - Ej - labelMat[i] * (alphas[i] - alphaIold) * dataMatrix[i, :] * dataMatrix[j, :].T - labelMat[j] * (alphas[j] - alphaJold) * dataMatrix[j, :] * dataMatrix[j, :].T
                 # 步骤8：根据b_1和b_2更新b
@@ -261,7 +262,7 @@ def showClassifer(dataMat, w, b):
 
 if __name__ == '__main__':
     dataMat, labelMat = loadDataSet('testSet.txt')
-    b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.001, 40)
+    b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.002, 20)
     w = get_w(dataMat, labelMat, alphas)
     showClassifer(dataMat, w, b)
     
