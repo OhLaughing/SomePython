@@ -26,6 +26,8 @@ def set_global_x(num):
 set_x(43)
 set_global_x(6)
 ```
+- python命令，who和whos可以查看所有变量，以及变量的信息，利用del命令可以删除变量的定义
+
 
 ## paper
 - A practical guide to SVM classification 
