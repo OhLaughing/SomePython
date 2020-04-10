@@ -3,7 +3,7 @@
   机器学习连接：https://www.cnblogs.com/aabbcc/p/8683042.html
 - 【数学】拉格朗日对偶，从0到完全理解：https://blog.csdn.net/frostime/article/details/90291392
 - global set value
-···python
+```python
 x = 1
 y = 2
 x, y = swap(x, y)     # => x = 2, y = 1
@@ -25,7 +25,7 @@ def set_global_x(num):
 
 set_x(43)
 set_global_x(6)
-···
+```
 
 ## paper
 - A practical guide to SVM classification 
