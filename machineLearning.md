@@ -24,3 +24,9 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 - sklearn 中文教程：https://www.kesci.com/home/project/5df87b152823a10036aca1a9
 - scikit-learn (sklearn) 官方文档中文版：https://sklearn.apachecn.org/#/
 - 如果a是numpy.ndarray，如果是一维的，a[:2]表示前两个元素，a[2:]表示从第二个到最后， 如果a是二维的，a[:2]表示前两行，a[2:]表示从第二行到最后，a[:, :2]表示取所有行，前两列
+
+## 学习知识点记录
+-   normalization\make_classification
+-   RBF Kernel
+-   cross-validation
+-   svm 正则化参数
