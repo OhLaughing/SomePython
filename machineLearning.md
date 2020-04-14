@@ -31,3 +31,4 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 -   RBF Kernel
 -   cross-validation
 -   svm 正则化参数
+-   核技巧
