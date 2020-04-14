@@ -26,6 +26,8 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 - 如果a是numpy.ndarray，如果是一维的，a[:2]表示前两个元素，a[2:]表示从第二个到最后， 如果a是二维的，a[:2]表示前两行，a[2:]表示从第二行到最后，a[:, :2]表示取所有行，前两列
 
 - 机器学习实战(用Scikit-learn和TensorFlow进行机器学习: https://me.csdn.net/fjl_CSDN
+- 引入核函数本质：存在一些核函数，在不知道映射函数的情况下，能得到和使用映射函数一样的结果。而且使用核函数，能使计算更加简单，有效。
+
 ## 学习知识点记录
 -   normalization\make_classification
 -   RBF Kernel
