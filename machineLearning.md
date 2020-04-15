@@ -27,6 +27,7 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 
 - 机器学习实战(用Scikit-learn和TensorFlow进行机器学习: https://me.csdn.net/fjl_CSDN
 - 引入核函数本质：存在一些核函数，在不知道映射函数的情况下，能得到和使用映射函数一样的结果。而且使用核函数，能使计算更加简单，有效。
+- SVM推导：https://blog.csdn.net/u011529752/article/details/64443133
 
 ## 学习知识点记录
 -   normalization\make_classification
