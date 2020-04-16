@@ -54,6 +54,7 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 
 3. 抽样方法
 ```
+- 提升机器学习数学基础，这7本书一定要读-附pdf资源：https://blog.csdn.net/xinshucredit/article/details/89552600
 
 ## 学习知识点记录
 -   normalization\make_classification
