@@ -39,7 +39,7 @@ L2 = [str(c) for c in L]
 
 ## numpy
 - np.ones((3,5))、np.full((3,5), 3.14)、
-- np.linspace(0,1,10) 生成等差数列，start：0,stop:1,共10个数（包括start和stop）
+- np.linspace(0,1,10) 生成等差数列，start：0,stop:1,共10个数（包括start和stop），num默认50
 - np.array([1,2,3])
 - n.arange(0,10，2) 生成等差数列，包括start，不包括stop
 - 数组的属性：ndim、shape、size、dtype
