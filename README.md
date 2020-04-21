@@ -37,4 +37,16 @@ L2 = [str(c) for c in L]
 ## paper
 - A practical guide to SVM classification 
 
-
+## numpy
+- np.ones((3,5))、np.full((3,5), 3.14)、
+- np.linspace(0,1,10) 生成等差数列，start：0,stop:1,共10个数（包括start和stop）
+- n.arange(0,10，2) 生成等差数列，包括start，不包括stop
+- 数组的属性：ndim、shape、size、dtype
+- x[-1]取数组末尾数据
+- 多维数组，x[1,2]取1行2列元素
+- 与python不同，numpy 是固定类型的
+- x[start:stop:step]取元素，默认start=0,stop为数组维度，step=1
+- x[::2] 从0每隔一个取一个元素，x[1::2] 从1每隔一个取一个元素,x[::-1]逆序取元素
+- x2是二维的，x2[:3,::2]取前3行，列从0开始每隔一个取一个元素
+- x2[0]等同于x2[0,:]
+- grid = np.arange(1,10).reshape(3,3)
