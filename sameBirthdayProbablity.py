@@ -14,14 +14,14 @@ def permutation(a, b):
     return func(a) / func(a - b)
 
 
-num = []
-probablity = []
-for i in range(100):
-    num.append(i)
-    a = 1 - permutation(365, i) / math.pow(365, i)
-    probablity.append(a)
+num = [i for i in range(100)]
+probablity = [1 - permutation(365, i) / math.pow(365, i) for i in range(100)]
+# for i in range(100):
+#     num.append(i)
+#     a = 1 - permutation(365, i) / math.pow(365, i)
+#     probablity.append(a)
 
 # probablity = [1- (permutation(365, i) / math.pow(365, i)) for i in num]
 
-plt.plot(num, probablity, '-')
+plt.scatter(num, probablity)
 plt.show()
