@@ -32,7 +32,15 @@ set_global_x(6)
 L = list(range(10))
 L2 = [str(c) for c in L]
 ```
-
+sorted和operator.itemgetter实现排序，也可以通过加reverse=True来实现逆序排序
+```python
+import operator
+students = [('john', 'A', 15), ('jane', 'B', 12), ('dave', 'B', 10)]
+sorted(students, key=operator.itemgetter(2))  # 根据第3个值进行排序
+# [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值进行排序
+# [('john', 'A', 15), ('dave', 'B', 10), ('jane', 'B', 12)]
+```
 
 ## paper
 - A practical guide to SVM classification 
