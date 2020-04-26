@@ -72,3 +72,4 @@ sum(y_train==1) sum(y_test==0) 等命令查看可知，分配的策略是安装�
 -   《应用随机过程》
 -   离散分布：0-1分布、二项分布、几何分布、泊松分布
 -  Ian Goodfellow, Yoshua Bengio, and Aaron Courville.Deep Learning. MIT Press:http://www.deeplearningbook.org/
+-   动手学深度学习pytorch版：https://tangshusen.me/Dive-into-DL-PyTorch/#/
