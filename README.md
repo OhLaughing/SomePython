@@ -72,3 +72,4 @@ array([[0, 0, 0],
        [0, 1, 2],
        [0, 2, 4]])
 ```
+- a = (x for x in range(5))得到generator对象，然后通过a.next()获取元素，会提示： 'generator' object has no attribute 'next'，应该用a.__next__()
