@@ -41,6 +41,8 @@ sorted(students, key=operator.itemgetter(2))  # 根据第3个值进行排序
 sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值进行排序
 # [('john', 'A', 15), ('dave', 'B', 10), ('jane', 'B', 12)]
 ```
+- Stochastic Gradient Descent (SGD)
+- CS229的课程大纲（包含习题和课题讨论资料）：http://cs229.stanford.edu/syllabus-autumn2018.html
 
 ## paper
 - A practical guide to SVM classification 
