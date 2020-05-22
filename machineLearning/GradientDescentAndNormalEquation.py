@@ -1,5 +1,6 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plot
 # 梯度下降法和正规方程法比较
 
 # 本例是一个特征值的情况， 特征为房屋面积，目标为房屋价格
@@ -12,14 +13,14 @@ x = np.random.randint(30, 300, 30).reshape(30, 1)
 
 y = (2 * x) + 10 + (np.random.randn(30).reshape(30, 1) * 40)
 
+
 # plt.scatter(x, y)
 # plt.show()
 
-rate = 0.00001
-
 
 def gradientDescent(x, y):
-    iterator = 200
+    rate = 0.00001
+    iterator = 500
     theta = np.random.rand(2).reshape(2, 1)
     X = np.hstack((np.ones(30).reshape(30, 1), x))
 
@@ -36,9 +37,13 @@ def gradientDescent(x, y):
     m = theta[0] + n * theta[1]
 
     print('after gridient descent, theta_0: %f , theta_1: %f' % (theta[0], theta[1]))
-    # plt.scatter(x, y)
-    # plt.plot(n, m, 'r')
-    # plt.show()
+    plt.scatter(x*100, y)
+    plt.plot(n, m, 'r')
+    plt.show()
+
+
+def gradientDescent_featureScaling(x, y):
+    gradientDescent(x, y)
 
 
 # gradientDescent(x, y)
@@ -54,7 +59,9 @@ def normalEquation(x, y):
     # plt.show()
 
 
-gradientDescent(x, y)
-normalEquation(x, y)
+if __name__ == '__main__':
+    print('hh')
+    x = x / 100
+    gradientDescent_featureScaling(x, y)
 
 # 感觉梯度下降法还是有点问题，theta_0 偏差有点大，可能是需要特征缩放
