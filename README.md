@@ -76,3 +76,5 @@ array([[0, 0, 0],
 ```
 - a = (x for x in range(5))得到generator对象，然后通过a.next()获取元素，会提示： 'generator' object has no attribute 'next'，应该用a.__next__()
 - 笛卡尔坐标、极坐标
+- np.c_ 是将两个矩阵左右组合到一个矩阵（c为column）,用法np.c_[a,b],不是括号
+- np.r_ 是将两个矩阵上下组合到一个矩阵（r为row）
