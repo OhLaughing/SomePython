@@ -14,6 +14,22 @@ def loadData(file):
         y.append(float(v[1]))
     return x, y
 
+def loadData_2feature(file):
+    f = open(file, 'r')
+    lines = f.readlines()
+    x = []
+    y = []
+    for line in lines:
+        line = line.strip('\n')
+        v = line.split(',')
+        x.append(float(v[0]))
+        x.append(float(v[1]))
+        y.append(float(v[2]))
+    x = np.array(x)
+    x = x.reshape(len(y), 2)
+    y = np.array(y)
+    y = y.reshape(len(y), 1)
+    return x, y
 
 def plotData(x, y):
     plt.scatter(x, y, 15, 'r', 'x')
@@ -22,17 +38,36 @@ def plotData(x, y):
 
 
 def gradientDescent(x, y):
-    iter = 2000
-    rate = 0.0003
-    X = np.c_[np.ones(len), x]
-    w = np.array([0,0])
+    iter = 1000
+    rate = 0.01
+    X = np.c_[np.ones(len(x)), x]
+    w = np.zeros(2)
     for i in range(iter):
-        C = (X.dot(w) - y).T.dot(X.dot(w) - y)/(2*97)
+        C = ((X.dot(w) - y).T.dot(X.dot(w) - y)) / (2 * len(x))
         print("cost function: " + str(C))
-
-        dw = X.T.dot(X.dot(w) - y)/97
+        print(w)
+        dw = X.T.dot(X.dot(w) - y) / len(x)
         w = w - (dw * rate)
     return w
+
+
+def normalEquation(x, y):
+    X = np.c_[np.ones(len(x)), x]
+    theta = np.dot(np.dot(np.linalg.pinv(np.dot(X.T, X)), X.T), y)
+    return theta
+
+
+def gradientDescentMulVariables(x, y, theta, alpha, iters):
+    X = np.c_[np.ones(len(x)), x]
+
+    for i in range(iters):
+        error = X.dot(theta) - y
+        C = error.T.dot(error) / (2 * len(x))
+        print("C: " + str(C))
+        dtheta = X.T.dot(X.dot(theta) - y) / len(x)
+        print(theta)
+        theta = theta - (dtheta * alpha)
+    return theta
 
 def plotLine(w):
     x = np.linspace(0,20,10)
