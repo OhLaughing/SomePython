@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
+
 def loadData(file):
     f = open(file, 'r')
     lines = f.readlines()
@@ -13,6 +14,7 @@ def loadData(file):
         x.append(float(v[0]))
         y.append(float(v[1]))
     return x, y
+
 
 def loadData_2feature(file):
     f = open(file, 'r')
@@ -31,24 +33,36 @@ def loadData_2feature(file):
     y = y.reshape(len(y), 1)
     return x, y
 
+
 def plotData(x, y):
     plt.scatter(x, y, 15, 'r', 'x')
     plt.xlabel('Population of City in 10000s')
     plt.ylabel('Profit in $10000s')
 
 
-def gradientDescent(x, y):
-    iter = 1000
-    rate = 0.01
+def scale(c):
+    return (c - np.average(c)) / (np.max(c) - np.min(c))
+
+
+def featureScalling(x):
+    if (len(x.shape)) == 1:
+        return scale(x)
+    for i in range(len(x)):
+        c = x[i]
+        c = (c - np.average(c)) / (np.max(c) - np.min(c))
+        x[i] = c
+    return x.T
+
+
+def gradientDescent(x, y, theta, alpha, iters):
     X = np.c_[np.ones(len(x)), x]
-    w = np.zeros(2)
-    for i in range(iter):
-        C = ((X.dot(w) - y).T.dot(X.dot(w) - y)) / (2 * len(x))
+    for i in range(iters):
+        C = ((X.dot(theta) - y).T.dot(X.dot(theta) - y)) / (2 * len(x))
         print("cost function: " + str(C))
-        print(w)
-        dw = X.T.dot(X.dot(w) - y) / len(x)
-        w = w - (dw * rate)
-    return w
+        print(theta)
+        dtheta = X.T.dot(X.dot(theta) - y) / len(x)
+        theta = theta - (dtheta * alpha)
+    return theta
 
 
 def normalEquation(x, y):
@@ -61,7 +75,10 @@ def gradientDescentMulVariables(x, y, theta, alpha, iters):
     X = np.c_[np.ones(len(x)), x]
 
     for i in range(iters):
-        error = X.dot(theta) - y
+        a = X.dot(theta)
+        print(a.shape)
+        print(y.shape)
+        error = a - y
         C = error.T.dot(error) / (2 * len(x))
         print("C: " + str(C))
         dtheta = X.T.dot(X.dot(theta) - y) / len(x)
@@ -69,20 +86,20 @@ def gradientDescentMulVariables(x, y, theta, alpha, iters):
         theta = theta - (dtheta * alpha)
     return theta
 
-def plotLine(w):
-    x = np.linspace(0,20,10)
-    y = x*w[1]+w[0]
-    plt.plot(x,y,'-r')
 
-def plotcostFunction(x,y):
+def plotLine(w):
+    x = np.linspace(0, 20, 10)
+    y = x * w[1] + w[0]
+    plt.plot(x, y, '-r')
+
+
+def plotcostFunction3D(x, y):
     fig1 = plt.figure()
     ax = Axes3D(fig1)
-    X = np.c_[np.ones(len), x]
     w0, w1 = np.mgrid[-2:2:40j, -2:2:40j]
-    w = np.array([w0,w1])
-    J=0
+    J = .0
     for i in range(97):
-        J+=(w0+w1*x[i]-y[i])**2
+        J += (w0 + w1 * x[i] - y[i]) ** 2
 
     plt.title("This is main title")  # 总标题
     ax.plot_surface(w0, w1, J, rstride=1, cstride=1, cmap=plt.cm.coolwarm, alpha=0.5)  # 用取样点(x,y,z)去构建曲面
@@ -91,13 +108,59 @@ def plotcostFunction(x,y):
     ax.set_zlabel('z label', color='b')  # 给三个坐标轴注明
     plt.show()  # 显示模块中的所有绘图对象
 
-if __name__ == '__main__':
+
+# 等高线，即代价函数相同
+def plotContour(x, y):
+    step = 20
+    a = np.arange(-20000, 20000, step)
+    b = np.arange(-5000, 5000, step)
+    A, B = np.meshgrid(a, b)
+    J = 0
+    for i in range(97):
+        J += (A + B * x[i] - y[i]) ** 2
+    # 画等高线
+    plt.contour(A, B, J)
+    plt.show()
+
+
+def testMultipleVariable():
+    x, y = loadData_2feature('ex1data2.txt')
+    theta = np.zeros(3).reshape(3, 1)
+    w = gradientDescentMulVariables(x, y, theta, 0.0000001, 10000)
+    print('gradientDescentMulVariables' + str(w))
+    w = normalEquation(x, y)
+    print("normalEquation" + str(w))
+
+
+def getAverAndRange(x):
+    '''
+    :param x:输入x的一列为一个特征的样本值
+    :return:x有几列，输出就有几列，并且行数为2，第一行为平均值，第二行为范围
+    '''
+    n = x.shape[1]
+
+def testOneVariable():
     x, y = loadData('ex1data1.txt')
-    len = len(x)
     x = np.array(x)
     y = np.array(y)
-    plotcostFunction(x,y)
-    # w = gradientDescent(x, y)
+    # plotcostFunction3D(x, y)
+    # plotContour(x,y)
+    print(x[0:4])
+    print(x.shape)
+    aver = np.average(x)
+    range = np.max(x) - np.min(x)
+    x = featureScalling(x)
+    print(x)
+    # print(x[0:4])
+    theta = np.zeros(2)
+    w = gradientDescent(x, y, theta, 0.1, 1000)
+    print(w)
+
+    w[0] = w[0] - w[1] * aver / range
+    w[1] = w[1] / range
+    print(w)
+    w = normalEquation(x, y)
+    print('normal equation' + str(w))
     # X = np.c_[np.ones(len), x]
     # C = (X.dot(w) - y).T.dot(X.dot(w) - y)/(2*97)
     # for i in range(100):
@@ -107,7 +170,12 @@ if __name__ == '__main__':
     #         break
     #     C = C1
     #     w[0]+=0.01
-    # plotData(x,y)
-    # print(w)
+
+    # plotData(x, y)
+    #
     # plotLine(w)
     # plt.show()
+
+
+if __name__ == '__main__':
+    testOneVariable()
