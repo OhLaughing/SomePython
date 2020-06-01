@@ -44,14 +44,14 @@ def scale(c):
     return (c - np.average(c)) / (np.max(c) - np.min(c))
 
 
-def featureScalling(x):
-    if (len(x.shape)) == 1:
-        return scale(x)
-    for i in range(len(x)):
-        c = x[i]
-        c = (c - np.average(c)) / (np.max(c) - np.min(c))
-        x[i] = c
-    return x.T
+def featureScalling(x, aver_range):
+    if x.ndim == 1:
+        return (x - aver_range[0]) / aver_range[1]
+    for i in range(x.shape[1]):
+        c = x[:, i]
+        c = (c - aver_range[0, i]) / aver_range[1, i]
+        x[:, i] = c
+    return x
 
 
 def gradientDescent(x, y, theta, alpha, iters):
@@ -93,6 +93,13 @@ def plotLine(w):
     plt.plot(x, y, '-r')
 
 
+def costFunction(x, theta, y):
+    X = np.c_[np.ones(len(x)), x]
+    error = X.dot(theta) - y
+    C = error.T.dot(error) / (2 * len(x))
+    return C
+
+
 def plotcostFunction3D(x, y):
     fig1 = plt.figure()
     ax = Axes3D(fig1)
@@ -126,10 +133,18 @@ def plotContour(x, y):
 def testMultipleVariable():
     x, y = loadData_2feature('ex1data2.txt')
     theta = np.zeros(3).reshape(3, 1)
-    w = gradientDescentMulVariables(x, y, theta, 0.0000001, 10000)
-    print('gradientDescentMulVariables' + str(w))
+    aver_range = getAverAndRange(x)
+
+    x = featureScalling(x, aver_range)
+    theta = gradientDescentMulVariables(x, y, theta, 0.01, 1000)
+    theta = calculateTheta(theta, aver_range)
+    print('gradientDescentMulVariables' + str(theta))
+    C = costFunction(x, theta, y)
+    print('C: ' + str(C))
     w = normalEquation(x, y)
     print("normalEquation" + str(w))
+    C = costFunction(x, w, y)
+    print('C: ' + str(C))
 
 
 def getAverAndRange(x):
@@ -137,30 +152,50 @@ def getAverAndRange(x):
     :param x:输入x的一列为一个特征的样本值
     :return:x有几列，输出就有几列，并且行数为2，第一行为平均值，第二行为范围
     '''
-    n = x.shape[1]
+    if (x.ndim == 1):
+        result = np.empty((2, 1))
+        result[0] = np.average(x)
+        result[1] = np.max(x) - np.min(x)
+        return result
+    elif (x.ndim == 2):
+        column = x.shape[1]
+        result = np.empty((2, column))
+        for i in range(column):
+            result[0, i] = np.average(x[:, i])
+            result[1, i] = np.max(x[:, i]) - np.min(x[:, i])
+        return result
+
+
+def calculateTheta(theta, aver_range):
+    for i in range(len(theta) - 1):
+        theta[0] -= theta[i + 1] * aver_range[0, i] / aver_range[1, i]
+    for i in range(len(theta) - 1):
+        theta[i + 1] = theta[i + 1] / aver_range[1, i]
+    return theta
+
 
 def testOneVariable():
     x, y = loadData('ex1data1.txt')
     x = np.array(x)
-    y = np.array(y)
     # plotcostFunction3D(x, y)
     # plotContour(x,y)
-    print(x[0:4])
     print(x.shape)
-    aver = np.average(x)
-    range = np.max(x) - np.min(x)
-    x = featureScalling(x)
+    aver_range = getAverAndRange(x)
+    x = featureScalling(x, aver_range)
     print(x)
     # print(x[0:4])
     theta = np.zeros(2)
     w = gradientDescent(x, y, theta, 0.1, 1000)
     print(w)
 
-    w[0] = w[0] - w[1] * aver / range
-    w[1] = w[1] / range
+    w = calculateTheta(w, aver_range)
     print(w)
+    C = costFunction(x, w, y)
+    print("C: " + str(C))
     w = normalEquation(x, y)
     print('normal equation' + str(w))
+    C = costFunction(x, w, y)
+    print("C: " + str(C))
     # X = np.c_[np.ones(len), x]
     # C = (X.dot(w) - y).T.dot(X.dot(w) - y)/(2*97)
     # for i in range(100):
@@ -178,4 +213,6 @@ def testOneVariable():
 
 
 if __name__ == '__main__':
+    # testOneVariable()
+
     testOneVariable()
