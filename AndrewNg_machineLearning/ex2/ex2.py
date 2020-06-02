@@ -41,11 +41,25 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-1 * x))
 
 
+def costFunction(x, theta, y):
+    epsilon = 1e-5
+    X = np.c_[np.ones(len(x)), x]
+    return (-1 * np.log(X.dot(theta) + epsilon).T.dot(y) + (y - 1).T.dot(np.log(1 - X.dot(theta) + epsilon))) / len(y)
+
+
+def gridentDescent(x, y, theta, alpha, iters):
+    X = np.c_[np.ones(len(x)), x]
+    for i in range(iters):
+        print('C ' + str(costFunction(x, theta, y)))
+        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y)/len(x)
+        theta -= dtheta * alpha
+    return theta
+
+
 if __name__ == '__main__':
     x, y = loadData_2feature('ex2data1.txt')
-    print(x)
-    print(x.shape)
-    print(y)
-    print(y.shape)
+
     # plot(x, y)
-    print(sigmoid(y))
+    theta = np.zeros(3).reshape(3,1)
+    theta = gridentDescent(x, y, theta, 0.000001, 1000)
+    print(theta)
