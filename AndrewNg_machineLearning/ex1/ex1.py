@@ -47,11 +47,13 @@ def scale(c):
 def featureScalling(x, aver_range):
     if x.ndim == 1:
         return (x - aver_range[0]) / aver_range[1]
+    # 注意，这里如果不加copy，是对源对象进行修改
+    res = x.copy()
     for i in range(x.shape[1]):
-        c = x[:, i]
+        c = res[:, i]
         c = (c - aver_range[0, i]) / aver_range[1, i]
-        x[:, i] = c
-    return x
+        res[:, i] = c
+    return res
 
 
 def gradientDescent(x, y, theta, alpha, iters):
@@ -76,11 +78,10 @@ def gradientDescentMulVariables(x, y, theta, alpha, iters):
 
     for i in range(iters):
         a = X.dot(theta)
-        print(a.shape)
-        print(y.shape)
+
         error = a - y
         C = error.T.dot(error) / (2 * len(x))
-        print("C: " + str(C))
+        print("C: " + str(i) + " :" + str(C))
         dtheta = X.T.dot(X.dot(theta) - y) / len(x)
         print(theta)
         theta = theta - (dtheta * alpha)
@@ -135,15 +136,23 @@ def testMultipleVariable():
     theta = np.zeros(3).reshape(3, 1)
     aver_range = getAverAndRange(x)
 
-    x = featureScalling(x, aver_range)
-    theta = gradientDescentMulVariables(x, y, theta, 0.01, 1000)
+    x1 = featureScalling(x, aver_range)
+    theta = gradientDescentMulVariables(x1, y, theta, 0.3, 2000)
+    print(theta)
     theta = calculateTheta(theta, aver_range)
     print('gradientDescentMulVariables' + str(theta))
     C = costFunction(x, theta, y)
     print('C: ' + str(C))
+
+    # 注意，x进行特征缩放与不缩放，获得到的theta参数是不同的，但是最后计算得到的costfunction值是一样的
     w = normalEquation(x, y)
     print("normalEquation" + str(w))
     C = costFunction(x, w, y)
+    print('C: ' + str(C))
+
+    w = normalEquation(x1, y)
+    print("normalEquation" + str(w))
+    C = costFunction(x1, w, y)
     print('C: ' + str(C))
 
 
@@ -181,11 +190,11 @@ def testOneVariable():
     # plotContour(x,y)
     print(x.shape)
     aver_range = getAverAndRange(x)
-    x = featureScalling(x, aver_range)
-    print(x)
+    x1 = featureScalling(x, aver_range)
+    print(x1)
     # print(x[0:4])
     theta = np.zeros(2)
-    w = gradientDescent(x, y, theta, 0.1, 1000)
+    w = gradientDescent(x1, y, theta, 0.1, 1000)
     print(w)
 
     w = calculateTheta(w, aver_range)
@@ -215,4 +224,4 @@ def testOneVariable():
 if __name__ == '__main__':
     # testOneVariable()
 
-    testOneVariable()
+    testMultipleVariable()
