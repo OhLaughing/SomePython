@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+# import sys
+# sys.path.append("..\\ex1")
+from AndrewNg_machineLearning.ex1 import ex1
+
 
 def loadData_2feature(file):
     f = open(file, 'r')
@@ -51,8 +55,9 @@ def gridentDescent(x, y, theta, alpha, iters):
     X = np.c_[np.ones(len(x)), x]
     for i in range(iters):
         print('C ' + str(costFunction(x, theta, y)))
-        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y)/len(x)
+        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y) / len(x)
         theta -= dtheta * alpha
+        print(theta)
     return theta
 
 
@@ -60,6 +65,8 @@ if __name__ == '__main__':
     x, y = loadData_2feature('ex2data1.txt')
 
     # plot(x, y)
-    theta = np.zeros(3).reshape(3,1)
-    theta = gridentDescent(x, y, theta, 0.000001, 1000)
+    theta = np.zeros(3).reshape(3, 1)
+    aver_range = ex1.getAverAndRange(x)
+    x1 = ex1.featureScalling(x, aver_range)
+    theta = gridentDescent(x1, y, theta, 0.1, 2000)
     print(theta)
