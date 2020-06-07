@@ -48,7 +48,7 @@ def sigmoid(x):
 def costFunction(x, theta, y):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(X.dot(theta) + epsilon).T.dot(y) + (y - 1).T.dot(np.log(1 - X.dot(theta) + epsilon))) / len(y)
+    return (-1 * np.log(sigmoid(X.dot(theta))).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))))) / len(y)
 
 
 def gridentDescent(x, y, theta, alpha, iters):
@@ -61,6 +61,26 @@ def gridentDescent(x, y, theta, alpha, iters):
     return theta
 
 
+def plotresult(x, y, theta):
+    exam1_x = []
+    exam1_y = []
+    exam2_x = []
+    exam2_y = []
+    for i in range(len(y)):
+        if (y[i] == 0):
+            exam1_x.append(x[i, 0])
+            exam1_y.append([x[i, 1]])
+        elif (y[i] == 1):
+            exam2_x.append(x[i, 0])
+            exam2_y.append([x[i, 1]])
+    plt.scatter(exam1_x, exam1_y, s=20, c='r', label='not pass')
+    plt.scatter(exam2_x, exam2_y, s=20, c='b', label='pass')
+    x = np.linspace(30, 100, 10)
+    y = (-1 * theta[0] - theta[1] * x) / theta[2]
+    plt.plot(x, y, '-r')
+    plt.show()
+
+
 if __name__ == '__main__':
     x, y = loadData_2feature('ex2data1.txt')
 
@@ -70,3 +90,8 @@ if __name__ == '__main__':
     x1 = ex1.featureScalling(x, aver_range)
     theta = gridentDescent(x1, y, theta, 0.1, 2000)
     print(theta)
+    print('reverse eatureScalling')
+    theta = ex1.calculateTheta(theta, aver_range)
+    print(theta)
+    # plot(x,y)
+    plotresult(x, y, theta)
