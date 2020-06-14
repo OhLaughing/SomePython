@@ -73,19 +73,37 @@ def plotresult(x, y, theta):
         elif (y[i] == 1):
             exam2_x.append(x[i, 0])
             exam2_y.append([x[i, 1]])
-    plt.scatter(exam1_x, exam1_y, s=20, c='r', label='not pass')
-    plt.scatter(exam2_x, exam2_y, s=20, c='b', label='pass')
+    plt.scatter(exam1_x, exam1_y, s=20, c='r', marker='o', label='not pass')
+    plt.scatter(exam2_x, exam2_y, s=20, c='b', marker="x", label='pass')
     x = np.linspace(30, 100, 10)
     y = (-1 * theta[0] - theta[1] * x) / theta[2]
     plt.plot(x, y, '-r')
     plt.show()
 
+def plotresult1(x, y, p_x, p_y):
+    exam1_x = []
+    exam1_y = []
+    exam2_x = []
+    exam2_y = []
+    for i in range(len(y)):
+        if (y[i] == 0):
+            exam1_x.append(x[i, 0])
+            exam1_y.append([x[i, 1]])
+        elif (y[i] == 1):
+            exam2_x.append(x[i, 0])
+            exam2_y.append([x[i, 1]])
+    plt.scatter(exam1_x, exam1_y, s=20, c='r', marker='o', label='not pass')
+    plt.scatter(exam2_x, exam2_y, s=20, c='b', marker="x", label='pass')
+    plt.scatter(p_x, p_y, s=20, c='y', marker="+", label='pass')
 
-if __name__ == '__main__':
+    plt.show()
+
+
+def test1():
     x, y = loadData_2feature('ex2data1.txt')
 
     # plot(x, y)
-    theta = np.zeros(3).reshape(3, 1)
+    theta = np.ones(3).reshape(3, 1)
     aver_range = ex1.getAverAndRange(x)
     x1 = ex1.featureScalling(x, aver_range)
     theta = gridentDescent(x1, y, theta, 0.1, 2000)
@@ -95,3 +113,57 @@ if __name__ == '__main__':
     print(theta)
     # plot(x,y)
     plotresult(x, y, theta)
+
+
+def test2():
+    x, y = loadData_2feature('ex2data2.txt')
+
+    l = len(y)
+    X = np.empty(shape=(l, 27))
+    print(X.shape)
+
+    c = 0
+    for a in range(1, 7):
+        for b in range(0, a + 1):
+            newColumn = (x[:, 0] ** (a - b)) * (x[:, 1] ** b)
+
+            X[:, c] = newColumn
+            c = c + 1
+
+    theta = np.zeros(28).reshape(28, 1)
+    aver_range = ex1.getAverAndRange(X)
+    X1 = ex1.featureScalling(X, aver_range)
+    theta = gridentDescent(X1, y, theta, 0.1, 3000)
+    theta = ex1.calculateTheta(theta, aver_range)
+    print("*" * 30)
+    print(theta)
+    print(theta.shape)
+
+    x1 = np.arange(-0.75, 1, 0.01)
+    print(len(x1))
+    x2 = np.arange(-0.75, 1, 0.01)
+
+    X, Y = np.meshgrid(x1, x2)
+
+    Z = theta[0]
+    c = 1
+    for a in range(1, 7):
+        for b in range(0, a + 1):
+            Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
+
+            c = c + 1
+
+    p_x = []
+    p_y = []
+    for i in range(175):
+        for j in range(175):
+            if np.abs(Z[i, j]) < 1e-2:
+                p_x.append(x1[i])
+                p_y.append(x2[j])
+
+    plotresult1(x, y, p_x, p_y)
+
+
+if __name__ == '__main__':
+    # test1()
+    test2()
