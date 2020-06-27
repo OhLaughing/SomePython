@@ -46,7 +46,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-1 * x))
 
 
-def costFunction(x, theta, y):
+def costFunction(theta, x, y):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
     return (-1 * np.log(sigmoid(X.dot(theta))).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))))) / len(y)
@@ -59,12 +59,21 @@ def costFunction_reg(x, y, theta, rate):
             rate / 2 * len(y)) * theta.T.dot(theta)
 
 
-def gridentDescent(x, y, theta, alpha, iters):
+def gridentDescent(theta, x, y, alpha, iters):
     X = np.c_[np.ones(len(x)), x]
     for i in range(iters):
-        print('C ' + str(costFunction(x, theta, y)))
+        print('C ' + str(costFunction(theta, x, y)))
         dtheta = X.T.dot(sigmoid(X.dot(theta)) - y) / len(x)
         theta -= dtheta * alpha
+        # print(theta)
+    return theta
+
+def gridentDescent_1(theta, x, y):
+    X = np.c_[np.ones(len(x)), x]
+    for i in range(1000):
+        print('C ' + str(costFunction(theta, x, y)))
+        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y) / len(x)
+        theta -= dtheta * 0.1
         # print(theta)
     return theta
 
@@ -118,6 +127,7 @@ def plotresult1(x, y, p_x, p_y):
     plt.show()
 
 
+# 使用梯度下降法找最优值
 def test1():
     x, y = loadData_2feature('ex2data1.txt')
 
@@ -125,14 +135,24 @@ def test1():
     theta = np.ones(3).reshape(3, 1)
     aver_range = ex1.getAverAndRange(x)
     x1 = ex1.featureScalling(x, aver_range)
-    theta = gridentDescent(x1, y, theta, 0.1, 2000)
+    theta = gridentDescent(theta, x1, y, 0.1, 2000)
     print(theta)
     print('reverse eatureScalling')
     theta = ex1.calculateTheta(theta, aver_range)
     print(theta)
     # plot(x,y)
     plotresult(x, y, theta)
-    opt.fmin_tnc()
+
+
+# 使用fmin_tnc找最优值
+def test1_fmin_tnc():
+    x, y = loadData_2feature('ex2data1.txt')
+    X = np.c_[np.ones(len(x)), x]
+    # plot(x, y)
+    theta = np.ones(3).reshape(3, 1)
+
+    result = opt.fmin_tnc(func=costFunction, x0=theta, fprime=gridentDescent_1, args=(x, y))
+    print(result)
 
 
 def test2():
@@ -153,7 +173,7 @@ def test2():
     theta = np.zeros(28).reshape(28, 1)
     aver_range = ex1.getAverAndRange(X)
     X1 = ex1.featureScalling(X, aver_range)
-    theta = gridentDescent(X1, y, theta, 0.1, 1000)
+    theta = gridentDescent(theta, X1, y, 0.1, 1000)
     theta = ex1.calculateTheta(theta, aver_range)
     print("*" * 30)
     print(theta)
@@ -203,7 +223,7 @@ def test2_reg():
     theta = np.zeros(28).reshape(28, 1)
     aver_range = ex1.getAverAndRange(X)
     X1 = ex1.featureScalling(X, aver_range)
-    theta = gridentDescent(X1, y, theta, 0.1, 3000)
+    theta = gridentDescent(theta, X1, y, 0.1, 3000)
     theta = ex1.calculateTheta(theta, aver_range)
     print("*" * 30)
     print(theta)
@@ -236,4 +256,4 @@ def test2_reg():
 
 if __name__ == '__main__':
     # test1()
-    test1()
+    test1_fmin_tnc()
