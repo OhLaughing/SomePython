@@ -68,6 +68,7 @@ def gridentDescent(theta, x, y, alpha, iters):
         # print(theta)
     return theta
 
+# 该方法作为opt.fmin_tnc方法的入参，该方法并没有通过迭代梯度下降，而是只计算了步长
 def gridentDescent_1(theta, x, y):
     X = np.c_[np.ones(len(x)), x]
     a = sigmoid(X.dot(theta))
