@@ -49,7 +49,7 @@ def sigmoid(x):
 def costFunction(theta, x, y):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(sigmoid(X.dot(theta))).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))))) / len(y)
+    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))) +epsilon)) / len(y)
 
 
 def costFunction_reg(x, y, theta, rate):
@@ -72,7 +72,7 @@ def gridentDescent(theta, x, y, alpha, iters):
 def gridentDescent_1(theta, x, y):
     X = np.c_[np.ones(len(x)), x]
     a = sigmoid(X.dot(theta))
-    a= a.reshape(100,1)
+    a= a.reshape(len(x),1)
     dtheta = X.T.dot(a - y) / len(x)
     return dtheta
 
@@ -148,7 +148,8 @@ def test1_fmin_tnc():
     x, y = loadData_2feature('ex2data1.txt')
     X = np.c_[np.ones(len(x)), x]
     # plot(x, y)
-    theta = np.ones(3).reshape(3, 1)
+    # 为什么theta初始值全为1，就不行？
+    theta = np.zeros(3).reshape(3, 1)
 
     result = opt.fmin_tnc(func=costFunction, x0=theta, fprime=gridentDescent_1, args=(x, y))
     print(result)
@@ -203,6 +204,53 @@ def test2():
     plotresult1(x, y, p_x, p_y)
 
 
+def test2_fmin_tnc():
+    x, y = loadData_2feature('ex2data2.txt')
+
+    l = len(y)
+    X = np.empty(shape=(l, 27))
+
+    c = 0
+    for a in range(1, 7):
+        for b in range(0, a + 1):
+            newColumn = (x[:, 0] ** (a - b)) * (x[:, 1] ** b)
+
+            X[:, c] = newColumn
+            c = c + 1
+
+    theta = np.zeros(28).reshape(28, 1)
+
+    result = opt.fmin_tnc(func=costFunction, x0=theta, fprime=gridentDescent_1, args=(X, y))
+
+    print(result)
+    print(result[0])
+    print(type(result))
+    print("*" * 30)
+    theta = result[0]
+
+    x1 = np.arange(-0.75, 1, 0.01)
+    x2 = np.arange(-0.75, 1, 0.01)
+
+    X, Y = np.meshgrid(x1, x2)
+
+    Z = theta[0]
+    c = 1
+    for a in range(1, 7):
+        for b in range(0, a + 1):
+            Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
+
+            c = c + 1
+
+    p_x = []
+    p_y = []
+    for i in range(175):
+        for j in range(175):
+            if np.abs(Z[i, j]) < 0.2:
+                p_y.append(x1[i])
+                p_x.append(x2[j])
+
+    plotresult1(x, y, p_x, p_y)
+
 # 正则化
 def test2_reg():
     x, y = loadData_2feature('ex2data2.txt')
@@ -246,7 +294,7 @@ def test2_reg():
     p_y = []
     for i in range(175):
         for j in range(175):
-            if np.abs(Z[i, j]) < 1e-2:
+            if np.abs(Z[i, j]) < 1e-1:
                 p_y.append(x1[i])
                 p_x.append(x2[j])
 
@@ -255,4 +303,4 @@ def test2_reg():
 
 if __name__ == '__main__':
     # test1()
-    test1_fmin_tnc()
+    test2_fmin_tnc()
