@@ -70,12 +70,10 @@ def gridentDescent(theta, x, y, alpha, iters):
 
 def gridentDescent_1(theta, x, y):
     X = np.c_[np.ones(len(x)), x]
-    for i in range(1000):
-        print('C ' + str(costFunction(theta, x, y)))
-        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y) / len(x)
-        theta -= dtheta * 0.1
-        # print(theta)
-    return theta
+    a = sigmoid(X.dot(theta))
+    a= a.reshape(100,1)
+    dtheta = X.T.dot(a - y) / len(x)
+    return dtheta
 
 
 def gridentDescent_reg(x, y, theta, alpha, iters):
