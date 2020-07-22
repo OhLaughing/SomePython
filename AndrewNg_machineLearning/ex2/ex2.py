@@ -53,11 +53,12 @@ def costFunction(theta, x, y):
         np.log(1 - sigmoid(X.dot(theta))) + epsilon)) / len(y)
 
 
-def costFunction_reg(x, y, theta, rate):
+def costFunction_reg(theta, x, y, rate):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(sigmoid(X.dot(theta))).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))))) / len(y) + (
-            rate / 2 * len(y)) * (theta.T.dot(theta) - theta[0] * theta[0])
+    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(
+        np.log(1 - sigmoid(X.dot(theta))) + epsilon)) / len(y) +  (rate / 2 * len(y)) * (theta.T.dot(theta) - theta[0] * theta[0])
+
 
 
 def gridentDescent(theta, x, y, alpha, iters):
@@ -80,7 +81,7 @@ def gridentDescent_1(theta, x, y):
 
 
 # 正则化的梯度计算
-def gridentDescent_1(theta, x, y, rate):
+def gridentDescent_reg(theta, x, y,  rate):
     X = np.c_[np.ones(len(x)), x]
     a = sigmoid(X.dot(theta))
     a = a.reshape(len(x), 1)
@@ -88,16 +89,6 @@ def gridentDescent_1(theta, x, y, rate):
     reg[0] = 0
     dtheta = X.T.dot(a - y) / len(x) + reg
     return dtheta
-
-
-def gridentDescent_reg(x, y, theta, alpha, iters):
-    X = np.c_[np.ones(len(x)), x]
-    for i in range(iters):
-        print('C ' + str(costFunction_reg(x, theta, y)))
-        dtheta = X.T.dot(sigmoid(X.dot(theta)) - y) / len(x)
-        theta -= dtheta * alpha
-        print(theta)
-    return theta
 
 
 def plotresult(x, y, theta):
@@ -287,31 +278,32 @@ def test2_regularized():
 
     result = opt.fmin_tnc(func=costFunction_reg, x0=theta, fprime=gridentDescent_reg, args=(X, y, 1))
     print(result)
-    x1 = np.arange(-0.75, 1, 0.01)
-    print(len(x1))
-    x2 = np.arange(-0.75, 1, 0.01)
-
-    X, Y = np.meshgrid(x1, x2)
-
-    Z = theta[0]
-    c = 1
-    for a in range(1, 7):
-        for b in range(0, a + 1):
-            Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
-
-            c = c + 1
-
-    p_x = []
-    p_y = []
-    for i in range(175):
-        for j in range(175):
-            if np.abs(Z[i, j]) < 1e-1:
-                p_y.append(x1[i])
-                p_x.append(x2[j])
-
-    plotresult1(x, y, p_x, p_y)
+    # x1 = np.arange(-0.75, 1, 0.01)
+    # print(len(x1))
+    # x2 = np.arange(-0.75, 1, 0.01)
+    #
+    # X, Y = np.meshgrid(x1, x2)
+    #
+    # Z = theta[0]
+    # c = 1
+    # for a in range(1, 7):
+    #     for b in range(0, a + 1):
+    #         Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
+    #
+    #         c = c + 1
+    #
+    # p_x = []
+    # p_y = []
+    # for i in range(175):
+    #     for j in range(175):
+    #         if np.abs(Z[i, j]) < 1e-1:
+    #             p_y.append(x1[i])
+    #             p_x.append(x2[j])
+    #
+    # plotresult1(x, y, p_x, p_y)
 
 
 if __name__ == '__main__':
     # test1()
+    # test2_regularized()
     test2_regularized()
