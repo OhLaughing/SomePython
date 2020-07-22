@@ -49,14 +49,15 @@ def sigmoid(x):
 def costFunction(theta, x, y):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))) +epsilon)) / len(y)
+    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(
+        np.log(1 - sigmoid(X.dot(theta))) + epsilon)) / len(y)
 
 
 def costFunction_reg(x, y, theta, rate):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
     return (-1 * np.log(sigmoid(X.dot(theta))).T.dot(y) + (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))))) / len(y) + (
-            rate / 2 * len(y)) * theta.T.dot(theta)
+            rate / 2 * len(y)) * (theta.T.dot(theta) - theta[0] * theta[0])
 
 
 def gridentDescent(theta, x, y, alpha, iters):
@@ -68,12 +69,24 @@ def gridentDescent(theta, x, y, alpha, iters):
         # print(theta)
     return theta
 
+
 # 该方法作为opt.fmin_tnc方法的入参，该方法并没有通过迭代梯度下降，而是只计算了步长
 def gridentDescent_1(theta, x, y):
     X = np.c_[np.ones(len(x)), x]
     a = sigmoid(X.dot(theta))
-    a= a.reshape(len(x),1)
+    a = a.reshape(len(x), 1)
     dtheta = X.T.dot(a - y) / len(x)
+    return dtheta
+
+
+# 正则化的梯度计算
+def gridentDescent_1(theta, x, y, rate):
+    X = np.c_[np.ones(len(x)), x]
+    a = sigmoid(X.dot(theta))
+    a = a.reshape(len(x), 1)
+    reg = (rate / len(x)) * theta
+    reg[0] = 0
+    dtheta = X.T.dot(a - y) / len(x) + reg
     return dtheta
 
 
@@ -131,12 +144,14 @@ def test1():
     x, y = loadData_2feature('ex2data1.txt')
 
     # plot(x, y)
-    theta = np.ones(3).reshape(3, 1)
+    theta = np.zeros(3).reshape(3, 1)
+    # x经过特征缩放与没有缩放的costfunction的值是相同的
+    print(costFunction(theta, x, y))
     aver_range = ex1.getAverAndRange(x)
     x1 = ex1.featureScalling(x, aver_range)
     theta = gridentDescent(theta, x1, y, 0.1, 2000)
     print(theta)
-    print('reverse eatureScalling')
+    print('reverse featureScalling')
     theta = ex1.calculateTheta(theta, aver_range)
     print(theta)
     # plot(x,y)
@@ -251,8 +266,9 @@ def test2_fmin_tnc():
 
     plotresult1(x, y, p_x, p_y)
 
+
 # 正则化
-def test2_reg():
+def test2_regularized():
     x, y = loadData_2feature('ex2data2.txt')
 
     l = len(y)
@@ -268,14 +284,9 @@ def test2_reg():
             c = c + 1
 
     theta = np.zeros(28).reshape(28, 1)
-    aver_range = ex1.getAverAndRange(X)
-    X1 = ex1.featureScalling(X, aver_range)
-    theta = gridentDescent(theta, X1, y, 0.1, 3000)
-    theta = ex1.calculateTheta(theta, aver_range)
-    print("*" * 30)
-    print(theta)
-    print(theta.shape)
 
+    result = opt.fmin_tnc(func=costFunction_reg, x0=theta, fprime=gridentDescent_reg, args=(X, y, 1))
+    print(result)
     x1 = np.arange(-0.75, 1, 0.01)
     print(len(x1))
     x2 = np.arange(-0.75, 1, 0.01)
@@ -303,4 +314,4 @@ def test2_reg():
 
 if __name__ == '__main__':
     # test1()
-    test2_fmin_tnc()
+    test2_regularized()
