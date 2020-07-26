@@ -49,16 +49,39 @@ def sigmoid(x):
 def costFunction(theta, x, y):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(
-        np.log(1 - sigmoid(X.dot(theta))) + epsilon)) / len(y)
+    left = -1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y)
+    right = (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))) + epsilon)
+    print('left: %f, right: %f' % (left, right))
+    return (left + right) / len(y)
 
 
 def costFunction_reg(theta, x, y, rate):
     epsilon = 1e-5
     X = np.c_[np.ones(len(x)), x]
-    return (-1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y) + (y - 1).T.dot(
-        np.log(1 - sigmoid(X.dot(theta))) + epsilon)) / len(y) +  (rate / 2 * len(y)) * (theta.T.dot(theta) - theta[0] * theta[0])
+    left = -1 * np.log(sigmoid(X.dot(theta)) + epsilon).T.dot(y)
+    right = (y - 1).T.dot(np.log(1 - sigmoid(X.dot(theta))) + epsilon)
+    print(theta.shape)
+    print(theta.T.dot(theta))
+    reg = (rate / 2) * (theta.T.dot(theta) - theta[0] * theta[0])
+    print('type(reg):' + str(type(reg)))
+    return (left + right + reg) / len(y)
 
+
+# 正则化的梯度计算,只计算步长
+def gridentDescent_reg(theta, x, y, rate):
+    X = np.c_[np.ones(len(x)), x]
+    a = sigmoid(X.dot(theta))
+    a = a.reshape(len(x), 1)
+    reg = (rate / len(x)) * theta
+    print('regshape' + str(reg.shape))
+    reg[0] = 0
+    tmp = X.T.dot(a - y)/len(x)
+    print(tmp.shape)
+    dtheta = np.empty(len(tmp))
+    for i in range(len(tmp)):
+        dtheta[i] = tmp[i]+reg[i]
+    print(dtheta.shape)
+    return dtheta
 
 
 def gridentDescent(theta, x, y, alpha, iters):
@@ -77,17 +100,6 @@ def gridentDescent_1(theta, x, y):
     a = sigmoid(X.dot(theta))
     a = a.reshape(len(x), 1)
     dtheta = X.T.dot(a - y) / len(x)
-    return dtheta
-
-
-# 正则化的梯度计算
-def gridentDescent_reg(theta, x, y,  rate):
-    X = np.c_[np.ones(len(x)), x]
-    a = sigmoid(X.dot(theta))
-    a = a.reshape(len(x), 1)
-    reg = (rate / len(x)) * theta
-    reg[0] = 0
-    dtheta = X.T.dot(a - y) / len(x) + reg
     return dtheta
 
 
@@ -259,7 +271,7 @@ def test2_fmin_tnc():
 
 
 # 正则化
-def test2_regularized():
+def test2_regularized(rate, error):
     x, y = loadData_2feature('ex2data2.txt')
 
     l = len(y)
@@ -274,36 +286,41 @@ def test2_regularized():
             X[:, c] = newColumn
             c = c + 1
 
-    theta = np.zeros(28).reshape(28, 1)
-
-    result = opt.fmin_tnc(func=costFunction_reg, x0=theta, fprime=gridentDescent_reg, args=(X, y, 1))
+    theta = np.ones(28).reshape(28, 1)
+    print('theta.shape'+str(theta.shape))
+    result = opt.fmin_tnc(func=costFunction_reg, x0=theta, fprime=gridentDescent_reg, args=(X, y, rate))
     print(result)
-    # x1 = np.arange(-0.75, 1, 0.01)
-    # print(len(x1))
-    # x2 = np.arange(-0.75, 1, 0.01)
-    #
-    # X, Y = np.meshgrid(x1, x2)
-    #
-    # Z = theta[0]
-    # c = 1
-    # for a in range(1, 7):
-    #     for b in range(0, a + 1):
-    #         Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
-    #
-    #         c = c + 1
-    #
-    # p_x = []
-    # p_y = []
-    # for i in range(175):
-    #     for j in range(175):
-    #         if np.abs(Z[i, j]) < 1e-1:
-    #             p_y.append(x1[i])
-    #             p_x.append(x2[j])
-    #
-    # plotresult1(x, y, p_x, p_y)
+    print(result[0])
+    print(type(result))
+    print("*" * 30)
+    theta = result[0]
 
+    x1 = np.arange(-0.75, 1.3, 0.01)
+    x2 = np.arange(-0.75, 1.3, 0.01)
+
+    X, Y = np.meshgrid(x1, x2)
+
+    Z = theta[0]
+    c = 1
+    for a in range(1, 7):
+        for b in range(0, a + 1):
+            Z = Z + (X ** (a - b)) * (Y ** b) * theta[c]
+
+            c = c + 1
+
+    p_x = []
+    p_y = []
+    for i in range(205):
+        for j in range(205):
+            if np.abs(Z[i, j]) < error:
+                p_y.append(x1[i])
+                p_x.append(x2[j])
+
+    plotresult1(x, y, p_x, p_y)
 
 if __name__ == '__main__':
     # test1()
-    # test2_regularized()
-    test2_regularized()
+    # test2_regularized(0, 0.05)
+    test2_regularized(1, 0.01)
+    # test2_regularized(100, 0.0001)
+    # test2_fmin_tnc()
