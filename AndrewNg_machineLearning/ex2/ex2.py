@@ -164,7 +164,6 @@ def test1():
 # 使用fmin_tnc找最优值
 def test1_fmin_tnc():
     x, y = loadData_2feature('ex2data1.txt')
-    X = np.c_[np.ones(len(x)), x]
     # plot(x, y)
     # 为什么theta初始值全为1，就不行？
     theta = np.zeros(3).reshape(3, 1)

@@ -1,6 +1,9 @@
-from scipy.io import loadmat
-from AndrewNg_machineLearning.ex2 import ex2
 import numpy as np
+from scipy.io import loadmat
+
+from AndrewNg_machineLearning.ex2 import ex2
+
+
 def gradient_with_loop(theta, x, y, rate):
     # 正则化的梯度计算,只计算步长
     X = np.c_[np.ones(len(x)), x]
@@ -25,5 +28,11 @@ if __name__ == '__main__':
     y = data['y']
     print(X.shape)
     print(y.shape)
-    print(X[0])
-    print(y[0:10])
+    classK = 10
+    theta = np.zeros((X.shape[1], classK))
+    print(theta.shape)
+    for i in range(classK):
+        tmp = 10 if i==0 else i
+        Y = y == tmp
+        Y = Y +0
+        print(Y)
