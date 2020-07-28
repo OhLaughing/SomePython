@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.optimize as opt
 from scipy.io import loadmat
 
 from AndrewNg_machineLearning.ex2 import ex2
@@ -26,13 +27,19 @@ if __name__ == '__main__':
 
     X = data['X']
     y = data['y']
-    print(X.shape)
-    print(y.shape)
+    print('X.shape' + str(X.shape))
+    print('y.shape' + str(y.shape))
     classK = 10
-    theta = np.zeros((X.shape[1], classK))
-    print(theta.shape)
+    theta = np.zeros((X.shape[1] + 1, classK))
     for i in range(classK):
-        tmp = 10 if i==0 else i
+        tmp = 10 if i == 0 else i
         Y = y == tmp
-        Y = Y +0
+        Y = Y + 0
         print(Y)
+        theTheta = np.zeros((X.shape[1] + 1))
+        print((theTheta.shape))
+        result = opt.fmin_tnc(func=ex2.costFunction, x0=theTheta, fprime=ex2.gridentDescent_1, args=(X, Y))
+        theTheta = result[0]
+        theta[:,i] = theTheta
+        print(theTheta.shape)
+    print(theta.shape)
