@@ -4,7 +4,7 @@ from scipy.io import loadmat
 
 from AndrewNg_machineLearning.ex2 import ex2
 
-
+# https://zhuanlan.zhihu.com/p/51355706
 def gradient_with_loop(theta, x, y, rate):
     # 正则化的梯度计算,只计算步长
     X = np.c_[np.ones(len(x)), x]
