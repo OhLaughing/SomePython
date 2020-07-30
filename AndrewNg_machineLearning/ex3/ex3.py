@@ -21,25 +21,43 @@ def gradient_with_loop(theta, x, y, rate):
     print(dtheta.shape)
     return dtheta
 
+def check(X, y, theta):
+    X = np.c_[np.ones(len(X)), X]
+    t = np.dot(X,theta)
+    t = t.argmax(axis=1)
+    t[t == 0] = 10
+    print(t.shape)
+    t = t.reshape(5000,1)
+    print(y.shape)
+    same = t==y
+    print(same.shape)
+    print(np.sum(same)/len(same))
 
 if __name__ == '__main__':
     data = loadmat('ex3data1.mat')
 
     X = data['X']
     y = data['y']
+    print(y.shape)
+    a=y.transpose()
+    print(a.shape)
     print('X.shape' + str(X.shape))
     print('y.shape' + str(y.shape))
     classK = 10
     theta = np.zeros((X.shape[1] + 1, classK))
-    for i in range(classK):
-        tmp = 10 if i == 0 else i
-        Y = y == tmp
-        Y = Y + 0
-        print(Y)
-        theTheta = np.zeros((X.shape[1] + 1))
-        print((theTheta.shape))
-        result = opt.fmin_tnc(func=ex2.costFunction, x0=theTheta, fprime=ex2.gridentDescent_1, args=(X, Y))
-        theTheta = result[0]
-        theta[:,i] = theTheta
-        print(theTheta.shape)
+    # for i in range(classK):
+    #     tmp = 10 if i == 0 else i
+    #     Y = y == tmp
+    #     Y = Y + 0
+    #     print(Y)
+    #     theTheta = np.zeros((X.shape[1] + 1))
+    #     print((theTheta.shape))
+    #     result = opt.fmin_tnc(func=ex2.costFunction, x0=theTheta, fprime=ex2.gridentDescent_1, args=(X, Y))
+    #     theTheta = result[0]
+    #     theta[:,i] = theTheta
+    #     print(theTheta.shape)
+    # np.savetxt('file1.txt', theta)
+    theta = np.loadtxt('file1.txt')
+    print(theta)
     print(theta.shape)
+    check(X, y, theta)
