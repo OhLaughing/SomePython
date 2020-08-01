@@ -61,3 +61,9 @@ if __name__ == '__main__':
     print(theta)
     print(theta.shape)
     check(X, y, theta)
+        check(X, y, theta)
+    newX = np.empty_like(X)
+    for i in range(len(X)):
+        line = X[i]
+        newX[i] = move(line, 20, 20, -2, -2)
+    check(newX, y, theta)
