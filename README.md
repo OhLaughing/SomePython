@@ -82,3 +82,4 @@ array([[0, 0, 0],
 - np.r_ 是将两个矩阵上下组合到一个矩阵（r为row）
 - ravel 将多维数组转成一维数组
 - numpy.ndarray可以用.transpose()方法来转置
+- 在ipython中如果想知道某个方法的详细信息说明，可以用help命令，例如：help(np.ravel)即可
