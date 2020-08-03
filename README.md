@@ -45,6 +45,7 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 - CS229的课程大纲（包含习题和课题讨论资料）：http://cs229.stanford.edu/syllabus-autumn2018.html
 - 在D:\workspace\learnprojects\SomePython-master\目录进入python解释器，import AndrewNg_machineLearning.ex2.ex2 as ex2
 然后 执行ex2.test1() 即可调用test1()方法
+- 神经网络基础[https://www.cnblogs.com/maybe2030/p/5597716.html]
 
 ## paper
 - A practical guide to SVM classification 
