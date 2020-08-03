@@ -37,6 +37,13 @@ def move(data, column, row, x_dif, y_dif):
     print(dat.shape)
     return np.ravel(dat)
 
+def move_matrix(X, column, row, x_dif, y_dif):
+    num = X.shape[0]
+    new_matrix = np.empty_like(X)
+    for i in range(num):
+        new_matrix[i, :] = move(X[i, :], column, row, x_dif, y_dif)
+    return new_matrix
+
 a = np.arange(12)
 print(a.reshape(3,4))
 
