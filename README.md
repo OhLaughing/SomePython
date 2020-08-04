@@ -50,6 +50,10 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 ## paper
 - A practical guide to SVM classification 
 
+## ipython
+- ?\??都是查询方法或模块的信息，例如：np.arange?\np.arange??, ??比？更详细
+- tab键，可以自动补全，例如，输入np.ar+tab，就会出现np.ar开头的所有的方法
+
 ## numpy
 - np.ones((3,5))、np.full((3,5), 3.14)、
 - np.linspace(0,1,10) 生成等差数列，start：0,stop:1,共10个数（包括start和stop），num默认50  endpoint 设为 true或False来控制是否包含stop
