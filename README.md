@@ -55,6 +55,7 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 - tab键，可以自动补全，例如，输入np.ar+tab，就会出现np.ar开头的所有的方法
 - str.*find*? 可以查找方法
 - 查看历史命令，可以用上下键，也可以用ctrl+p/ctrl+n, 但是用ctrl的好处是，可以指定开头，比如我之前输入了很多命令，但是我只想查看np.开头的命，就可以输入np.之后，通过ctrl+p/ctrl+n来查找
+- 可以在ipython中，使用ls、pwd、cd等命令
 
 ## numpy
 - np.ones((3,5))、np.full((3,5), 3.14)、
