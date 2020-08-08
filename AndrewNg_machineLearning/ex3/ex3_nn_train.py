@@ -2,6 +2,7 @@ from scipy.io import loadmat
 
 from AndrewNg_machineLearning.Utils import *
 
+# 本例子自己根据数据训练神经网络, 但还没有能正确的识别能力，有待优化
 
 def sigmoid(z):
     '''
@@ -126,7 +127,7 @@ def checkRate(datas, labels, w2, b2, w3, b3):
 
 
 if __name__ == '__main__':
-    # 此处神经网络的参数是直接读取别人的结论
+    # 
     data = loadmat('ex3data1.mat')
 
     X = data['X']
