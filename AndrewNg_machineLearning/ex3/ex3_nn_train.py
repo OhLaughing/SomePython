@@ -62,11 +62,13 @@ def train(datas, labels, iteration_time, rate, w2, b2, w3, b3):
         a2 = sigmoid(z2)
         z2_derivative = derivative_sigmoid(z2)
 
+        print(np.sum(z2_derivative))
         z3 = np.dot(a2, w3.transpose()) + b3.transpose()
         a3 = sigmoid(z3)
         z3_derivative = derivative_sigmoid(z3)
+        print(np.sum(z3_derivative))
 
-        t = np.zeros((len(labels), 10))
+        t = np.zeros((datas.shape[0], 10))
         for i in range(len(labels)):
             index = int(labels[i])
             if (index == 10):
@@ -82,8 +84,8 @@ def train(datas, labels, iteration_time, rate, w2, b2, w3, b3):
         w3_delta = np.zeros((len(labels), w3.shape[0], w3.shape[1]))
 
         for i in range(delta3.shape[0]):
-            t = np.dot(delta3[i, :].reshape(10, 1), a2[i, :].reshape(1, 25))
-            w3_delta[i, :, :] = t
+            tmp = np.dot(delta3[i, :].reshape(10, 1), a2[i, :].reshape(1, 25))
+            w3_delta[i, :, :] = tmp
 
         # w3_delta = np.dot(delta3.transpose(), a2)
         b3_delta = delta3.copy()
@@ -133,10 +135,16 @@ if __name__ == '__main__':
     X = data['X']
     y = data['y']
 
-    w2 = np.loadtxt('w2.txt')
-    w3 = np.loadtxt('w3.txt')
-    b2 = np.loadtxt('b2.txt')
-    b3 = np.loadtxt('b3.txt')
+    # w2 = np.loadtxt('w2.txt')
+    # w3 = np.loadtxt('w3.txt')
+    # b2 = np.loadtxt('b2.txt')
+    # b3 = np.loadtxt('b3.txt')
+
+    a = 30
+    w2 = np.random.rand((25,400))
+    w3 = np.ones((10,25))
+    b2 = np.ones((25))
+    b3 = np.ones((10))
 
     w2, b2, w3, b3 = train(X, y, 100, 0.05, w2, b2, w3, b3)
     # np.savetxt('w2.txt', w2)
