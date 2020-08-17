@@ -50,6 +50,9 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 ## paper
 - A practical guide to SVM classification 
 
+## 学习记录
+- 20200817： 前段时间一直在看吴恩达的机器学习课程，共8课，看到第4课神经网络，还没能自己通过反向传播来实现把例子的，手写数字识别，代码中不知道哪里还有些问题，昨天看了《机器学习实战》的knn算法，还没看完
+
 ## ipython
 - ?\??都是查询方法或模块的信息，例如：np.arange?\np.arange??, ??比？更详细
 - tab键，可以自动补全，例如，输入np.ar+tab，就会出现np.ar开头的所有的方法
