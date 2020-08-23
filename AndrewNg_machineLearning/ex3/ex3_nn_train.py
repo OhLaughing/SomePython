@@ -3,6 +3,7 @@ from scipy.io import loadmat
 from AndrewNg_machineLearning.Utils import *
 
 # 本例子自己根据数据训练神经网络, 但还没有能正确的识别能力，有待优化
+# 不能正确识别的原因是溢出问题
 
 def sigmoid(z):
     '''

@@ -48,7 +48,7 @@ for iter in range(iteration_time):
     delta3 = (a3 - t) * z3_derivative
 
     # 64*3
-    delta2 = np.dot(delta3, w3[:,1:]) * z2_derivative
+    delta2 = np.dot(delta3, w3[:,:-1]) * z2_derivative
 
     # 60*2*4
     w3_delta = np.zeros((len(labels), w3.shape[0], w3.shape[1]))
@@ -70,10 +70,6 @@ for iter in range(iteration_time):
     w3 -= (rate * w3_delta)
 
     print('iteration time: ' + str(iter) + ', Ct=' + str(Ct))
-
-right = 0
-
-testnum = 10
 
 
 def check(a1, labels):

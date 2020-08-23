@@ -55,11 +55,12 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 - 20200822： 看完《机器学习实战》的knn算法，在看《统计学习方法》的KNN，这里用KD树算法，用KD的主要目的是，找到最近的距离时，用二分查找方法，否则要遍历所有的样本才能知道最近的样本距离，效率很低，总结就是KD树查找效率为O(lg(n)),不用KD树（机器学习实战里的方法）效率为O(n)
 
 ## ipython
-- ?\??都是查询方法或模块的信息，例如：np.arange?\np.arange??, ??比？更详细
+- ?\??都是查询方法或模块的信息，例如：np.arange?\np.arange??, ??比？更详细，也可以help(np.arange)查看信息
 - tab键，可以自动补全，例如，输入np.ar+tab，就会出现np.ar开头的所有的方法
 - str.*find*? 可以查找方法
 - 查看历史命令，可以用上下键，也可以用ctrl+p/ctrl+n, 但是用ctrl的好处是，可以指定开头，比如我之前输入了很多命令，但是我只想查看np.开头的命，就可以输入np.之后，通过ctrl+p/ctrl+n来查找
 - 可以在ipython中，使用ls、pwd、cd等命令
+- 在python3中，reload，可以先import importlib 然后 importlib.reload(kNN1) 
 
 ## numpy
 - np.ones((3,5))、np.full((3,5), 3.14)、
