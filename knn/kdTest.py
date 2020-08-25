@@ -7,11 +7,12 @@ def initKdTree(allPoints, level, parent):
     print("allPoints\n" + str(allPoints))
     curNode = Node(allPoints, level, parent)
     if (allPoints.shape[0] == 1):
-        curNode.point = allPoints[0];
+        curNode.point = allPoints[0]
         return curNode
 
     var = np.var(allPoints, axis=0)
     dividDim = np.argsort(var)[var.shape[0] - 1]
+    curNode.dividDim = dividDim
     sort = np.argsort(allPoints, axis=0)[:, dividDim]
     l = int(len(sort) / 2)
     middleP = allPoints[sort[l], :]
@@ -32,7 +33,7 @@ def initKdTree(allPoints, level, parent):
 def printNode(node):
     parent = node.parent
     p = 'top' if parent == None else str(parent.point)
-    print(str(node.point) + " level: " + str(node.level) + " parent: " + p)
+    print(str(node.point) + " level: " + str(node.level) + " parent: " + p +" dividDim: " + str(node.dividDim))
     if (node.left != None):
         printNode(node.left)
     if (node.right != None):
