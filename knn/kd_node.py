@@ -9,6 +9,7 @@ class Node:
         self.point = 0
         self.left = None
         self.right = None
+        self.dividDim = None # 切分维度
 
     def init(self):
         sort = np.argsort(self.allPoints)
