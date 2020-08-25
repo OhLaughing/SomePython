@@ -1,1 +1,2 @@
 - 每次选择一个维度，进行划分，下一层划分的维度要和上一层不同
+- https://cloud.tencent.com/developer/news/212042
