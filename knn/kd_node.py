@@ -7,8 +7,8 @@ class Node:
         self.level = level
         self.parent = parent
         self.point = 0
-        self.left = 0
-        self.right = 0
+        self.left = None
+        self.right = None
 
     def init(self):
         sort = np.argsort(self.allPoints)
