@@ -58,6 +58,23 @@ def getDistant(x, y):
     return sum ** 0.5
 
 
+# 该方法用在从兄弟节点到叶子节点，找到是否有离目标点更近的
+def findToLeaf(node, x, nearestNode, nearestDistant):
+    while (node != None):
+        distant = getDistant(node.point, x)
+        if (distant < nearestDistant):
+            nearestDistant = distant
+            nearestNode = node
+        dim = node.dividDim
+        if (dim == None):
+            node = None
+        elif (x[dim] > node.point[dim]):
+            node = node.right
+        else:
+            node = node.left
+    return nearestNode, nearestDistant
+
+
 def findNearestNode(node, x):
     # 先找到叶子节点
     leafNode = getLeafNode(node, x)
@@ -70,11 +87,10 @@ def findNearestNode(node, x):
         parentDividDim = parentNode.dividDim
         # 以x为中心，以当时找到的最近距离为半径做圆，查看该圆是否与父节点的分隔线有相交
         if (nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim])):
+            # 从兄弟节点开始
             siblingNode = parentNode.left if currentNode == parentNode.right else parentNode.right
-            disTant1 = getDistant(siblingNode.point, x)
-            if (disTant1 < nearestDistant):
-                nearestDistant = disTant1
-                nearestNode = siblingNode
+
+            nearestNode, nearestDistant = findToLeaf(siblingNode, x, nearestNode, nearestDistant)
 
         disTant2 = getDistant(parentNode.point, x)
         if (disTant2 < nearestDistant):
@@ -86,6 +102,7 @@ def findNearestNode(node, x):
 
     return nearestNode
 
+
 if __name__ == '__main__':
     T = np.array([[2, 3], [5, 4], [9, 6], [4, 7], [8, 1], [7, 2]])
 
@@ -96,7 +113,6 @@ if __name__ == '__main__':
     head = initKdTree(T, 1, None)
     print(head)
     printNode(head)
-    x = np.array([6.5,0])
+    x = np.array([6.5, 1])
     nearestNode = findNearestNode(head, x)
     print(nearestNode.point)
-
