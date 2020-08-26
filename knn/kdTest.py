@@ -75,6 +75,27 @@ def findToLeaf(node, x, nearestNode, nearestDistant):
     return nearestNode, nearestDistant
 
 
+def findToLeaf_k(node, x, nearestNode, nearestDistant, nearestkNode, k):
+    while (node != None):
+        distant = getDistant(node.point, x)
+        if (len(nearestkNode) < k):
+            nearestkNode[node] = distant
+            nearestDistant = distant if distant > nearestDistant else nearestDistant
+        elif (distant < nearestDistant):
+            nearestkNode.remove(nearestNode)
+            nearestDistant = distant
+            nearestNode = node
+            nearestkNode[node] = distant
+        dim = node.dividDim
+        if (dim == None):
+            node = None
+        elif (x[dim] > node.point[dim]):
+            node = node.right
+        else:
+            node = node.left
+    return nearestNode, nearestDistant
+
+
 def findNearestNode(node, x):
     # 先找到叶子节点
     leafNode = getLeafNode(node, x)
@@ -111,28 +132,34 @@ def findkNearestNode(node, x, k):
     nearestNode = leafNode
     currentNode = leafNode
     nearestDistant = getDistant(leafNode.point, x)
-    nearestkNode[currentNode.point] = nearestDistant
+    nearestkNode[currentNode] = nearestDistant
 
     print(nearestDistant)
     parentNode = leafNode.parent
     while parentNode != None:
         parentDividDim = parentNode.dividDim
         # 以x为中心，以当时找到的最近距离为半径做圆，查看该圆是否与父节点的分隔线有相交
-        if (nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim])):
+        if nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim]) or len(nearestkNode) < k:
             # 从兄弟节点开始
             siblingNode = parentNode.left if currentNode == parentNode.right else parentNode.right
-
-            nearestNode, nearestDistant = findToLeaf(siblingNode, x, nearestNode, nearestDistant)
+            nearestNode, nearestDistant = findToLeaf_k(siblingNode, x, nearestNode, nearestDistant, nearestkNode, k)
 
         disTant2 = getDistant(parentNode.point, x)
-        if (disTant2 < nearestDistant):
+
+        if (len(nearestkNode) < k):
+            nearestkNode[parentNode] = disTant2
+            nearestDistant = disTant2 if disTant2 < nearestDistant else nearestDistant
+        elif (disTant2 < nearestDistant):
+            nearestkNode.remove(nearestNode)
             nearestDistant = disTant2
             nearestNode = parentNode
+            nearestkNode[parentNode] = disTant2
+
         tmp = parentNode
         parentNode = parentNode.parent
         currentNode = tmp
 
-    return nearestNode
+    return nearestkNode
 
 
 if __name__ == '__main__':
@@ -146,5 +173,8 @@ if __name__ == '__main__':
     print(head)
     printNode(head)
     x = np.array([6.5, 1])
-    nearestNode = findNearestNode(head, x)
-    print(nearestNode.point)
+    # nearestNode = findNearestNode(head, x)
+    # print(nearestNode.point)
+
+    n = findkNearestNode(head, x, 2)
+    print(n)
