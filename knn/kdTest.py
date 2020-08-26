@@ -103,6 +103,38 @@ def findNearestNode(node, x):
     return nearestNode
 
 
+def findkNearestNode(node, x, k):
+    # 先找到叶子节点
+    nearestkNode = {}
+    leafNode = getLeafNode(node, x)
+    # 此时，最近的点，及最近距离指的是，k个中距离最大的那个
+    nearestNode = leafNode
+    currentNode = leafNode
+    nearestDistant = getDistant(leafNode.point, x)
+    nearestkNode[currentNode.point] = nearestDistant
+
+    print(nearestDistant)
+    parentNode = leafNode.parent
+    while parentNode != None:
+        parentDividDim = parentNode.dividDim
+        # 以x为中心，以当时找到的最近距离为半径做圆，查看该圆是否与父节点的分隔线有相交
+        if (nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim])):
+            # 从兄弟节点开始
+            siblingNode = parentNode.left if currentNode == parentNode.right else parentNode.right
+
+            nearestNode, nearestDistant = findToLeaf(siblingNode, x, nearestNode, nearestDistant)
+
+        disTant2 = getDistant(parentNode.point, x)
+        if (disTant2 < nearestDistant):
+            nearestDistant = disTant2
+            nearestNode = parentNode
+        tmp = parentNode
+        parentNode = parentNode.parent
+        currentNode = tmp
+
+    return nearestNode
+
+
 if __name__ == '__main__':
     T = np.array([[2, 3], [5, 4], [9, 6], [4, 7], [8, 1], [7, 2]])
 
