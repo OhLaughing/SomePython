@@ -33,12 +33,58 @@ def initKdTree(allPoints, level, parent):
 def printNode(node):
     parent = node.parent
     p = 'top' if parent == None else str(parent.point)
-    print(str(node.point) + " level: " + str(node.level) + " parent: " + p +" dividDim: " + str(node.dividDim))
+    print(str(node.point) + " level: " + str(node.level) + " parent: " + p + " dividDim: " + str(node.dividDim))
     if (node.left != None):
         printNode(node.left)
     if (node.right != None):
         printNode(node.right)
 
+
+def getLeafNode(node, x):
+    # node.dividDim==None 就是叶子节点
+    if (node.dividDim == None):
+        return node
+    point = node.point
+    if (x[node.dividDim] > point[node.dividDim]):
+        return getLeafNode(node.right, x)
+    else:
+        return getLeafNode(node.left, x)
+
+
+def getDistant(x, y):
+    dif = x - y
+    square = dif ** 2
+    sum = np.sum(square)
+    return sum ** 0.5
+
+
+def findNearestNode(node, x):
+    # 先找到叶子节点
+    leafNode = getLeafNode(node, x)
+    nearestNode = leafNode
+    currentNode = leafNode
+    nearestDistant = getDistant(leafNode.point, x)
+    print(nearestDistant)
+    parentNode = leafNode.parent
+    while parentNode != None:
+        parentDividDim = parentNode.dividDim
+        # 以x为中心，以当时找到的最近距离为半径做圆，查看该圆是否与父节点的分隔线有相交
+        if (nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim])):
+            siblingNode = parentNode.left if currentNode == parentNode.right else parentNode.right
+            disTant1 = getDistant(siblingNode.point, x)
+            if (disTant1 < nearestDistant):
+                nearestDistant = disTant1
+                nearestNode = siblingNode
+
+        disTant2 = getDistant(parentNode.point, x)
+        if (disTant2 < nearestDistant):
+            nearestDistant = disTant2
+            nearestNode = parentNode
+        tmp = parentNode
+        parentNode = parentNode.parent
+        currentNode = tmp
+
+    return nearestNode
 
 if __name__ == '__main__':
     T = np.array([[2, 3], [5, 4], [9, 6], [4, 7], [8, 1], [7, 2]])
@@ -50,3 +96,7 @@ if __name__ == '__main__':
     head = initKdTree(T, 1, None)
     print(head)
     printNode(head)
+    x = np.array([6.5,0])
+    nearestNode = findNearestNode(head, x)
+    print(nearestNode.point)
+
