@@ -212,10 +212,10 @@ if __name__ == '__main__':
     head = initKdTree(T, 1, None, T.shape[1])
     print(head)
     printNode(head)
-    x = np.array([4, 1])
-    # nearestNode = findNearestNode(head, x)
-    # print(nearestNode.point)
+    x = np.array([6.5, 1])
+    nearestNode = findNearestNode(head, x)
+    print(nearestNode.point)
 
-    # n = findkNearestNode(head, x, 3, T.shape[1])
+    # n = findkNearestNode(head, x, 1)
     # for i in range(len(n)):
     #     print(str(n[i]))
