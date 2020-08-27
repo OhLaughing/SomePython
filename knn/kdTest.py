@@ -1,39 +1,45 @@
+import operator
+
 import numpy as np
 
 from knn.kd_node import Node
 
 
-def initKdTree(allPoints, level, parent):
+def initKdTree(allPoints, level, parent, m):
     print("allPoints\n" + str(allPoints))
-    curNode = Node(allPoints, level, parent)
+    curNode = Node(level, parent)
     if (allPoints.shape[0] == 1):
-        curNode.point = allPoints[0]
+        data = allPoints[0]
+        curNode.point = data[:m - 1]
+        curNode.index = data[-1]
         return curNode
 
-    var = np.var(allPoints, axis=0)
+    var = np.var(allPoints[:, :m - 1], axis=0)
     dividDim = np.argsort(var)[var.shape[0] - 1]
     curNode.dividDim = dividDim
     sort = np.argsort(allPoints, axis=0)[:, dividDim]
     l = int(len(sort) / 2)
     middleP = allPoints[sort[l], :]
-    curNode.point = middleP
+    curNode.point = middleP[:m - 1]
+    curNode.index = middleP[-1]
 
     if (l > 0):
         leftIndex = sort[0:l]
         leftData = allPoints[leftIndex, :]
-        curNode.left = initKdTree(leftData, level + 1, curNode)
+        curNode.left = initKdTree(leftData, level + 1, curNode, m)
 
     if (len(sort) > l + 1):
         rightIndex = sort[l + 1:]
         rightData = allPoints[rightIndex]
-        curNode.right = initKdTree(rightData, level + 1, curNode)
+        curNode.right = initKdTree(rightData, level + 1, curNode, m)
     return curNode
 
 
 def printNode(node):
     parent = node.parent
     p = 'top' if parent == None else str(parent.point)
-    print(str(node.point) + " level: " + str(node.level) + " parent: " + p + " dividDim: " + str(node.dividDim))
+    print(str(node.point) + " level: " + str(node.level) + " parent: " + p + " index: " + str(node.index) +
+          " dividDim: " + str(node.dividDim))
     if (node.left != None):
         printNode(node.left)
     if (node.right != None):
@@ -42,13 +48,23 @@ def printNode(node):
 
 def getLeafNode(node, x):
     # node.dividDim==None 就是叶子节点
-    if (node.dividDim == None):
-        return node
-    point = node.point
-    if (x[node.dividDim] > point[node.dividDim]):
-        return getLeafNode(node.right, x)
+    parent = None
+    currNode = node
+    while (currNode != None and currNode.dividDim != None):
+        parent = currNode
+        point = currNode.point
+        if (x[currNode.dividDim] > point[currNode.dividDim]):
+            currNode = currNode.right
+        else:
+            currNode = currNode.left
+
+    if currNode != None:
+        returnNode = currNode
+    elif (parent.left == None):
+        returnNode = parent.right
     else:
-        return getLeafNode(node.left, x)
+        returnNode = parent.left
+    return returnNode
 
 
 def getDistant(x, y):
@@ -145,7 +161,6 @@ def findkNearestNode(node, x, k):
     # 先找到叶子节点
     leafNode = getLeafNode(node, x)
     # 此时，最近的点，及最近距离指的是，k个中距离最大的那个
-    nearestNode = leafNode
     currentNode = leafNode
     nearestDistant = getDistant(leafNode.point, x)
     nearestkNodeList.append(NodeDistant(currentNode, nearestDistant))
@@ -177,6 +192,15 @@ def findkNearestNode(node, x, k):
     return nearestkNodeList
 
 
+def getNearestLabel(nodeList, labels):
+    labesDict = {}
+    for i in range(len(nodeList)):
+        label = labels[int(nodeList[i].node.index)]
+        labesDict[label] = labesDict.get(label, 0) + 1
+    sortedClassCount = sorted(labesDict.items(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+
+
 if __name__ == '__main__':
     T = np.array([[2, 3], [5, 4], [9, 6], [4, 7], [8, 1], [7, 2]])
 
@@ -184,14 +208,14 @@ if __name__ == '__main__':
     # head = Node(None, 0, None)
     # node = Node(T, 1, head)
     # node.init()
-    head = initKdTree(T, 1, None)
+    T = np.c_[T, np.arange(T.shape[0])]
+    head = initKdTree(T, 1, None, T.shape[1])
     print(head)
     printNode(head)
     x = np.array([4, 1])
     # nearestNode = findNearestNode(head, x)
     # print(nearestNode.point)
 
-    n = findkNearestNode(head, x, 3)
-    for i in range(len(n)):
-
-        print(str(n[i]))
+    # n = findkNearestNode(head, x, 3, T.shape[1])
+    # for i in range(len(n)):
+    #     print(str(n[i]))
