@@ -11,7 +11,7 @@ def initKdTree(allPoints, level, parent, m):
     if (allPoints.shape[0] == 1):
         data = allPoints[0]
         curNode.point = data[:m - 1]
-        curNode.index = data[-1]
+        curNode.index = int(data[-1])
         return curNode
 
     var = np.var(allPoints[:, :m - 1], axis=0)
@@ -21,7 +21,7 @@ def initKdTree(allPoints, level, parent, m):
     l = int(len(sort) / 2)
     middleP = allPoints[sort[l], :]
     curNode.point = middleP[:m - 1]
-    curNode.index = middleP[-1]
+    curNode.index = int(middleP[-1])
 
     if (l > 0):
         leftIndex = sort[0:l]
