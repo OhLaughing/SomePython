@@ -14,7 +14,8 @@ if __name__ == '__main__':
     # 训练集归一化
     normDataset, ranges, minVals = knn.autoNorm(trainData)
     T = np.c_[normDataset, np.arange(normDataset.shape[0])]
-    tree = kd.initKdTree(normDataset, 1, None, T.shape[1])
+    tree = kd.initKdTree(T, 1, None, T.shape[1])
+    kd.printNode(tree)
 
     errorNum =0
     for i in range(len(testlabels)):
