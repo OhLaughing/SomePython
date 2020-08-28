@@ -54,17 +54,10 @@ def getLeafNode(node, x):
         parent = currNode
         point = currNode.point
         if (x[currNode.dividDim] > point[currNode.dividDim]):
-            currNode = currNode.right
+            currNode = currNode.right if currNode.right!=None else currNode.left
         else:
-            currNode = currNode.left
-
-    if currNode != None:
-        returnNode = currNode
-    elif (parent.left == None):
-        returnNode = parent.right
-    else:
-        returnNode = parent.left
-    return returnNode
+            currNode = currNode.left if currNode.left!=None else currNode.right
+    return currNode
 
 
 def getDistant(x, y):
