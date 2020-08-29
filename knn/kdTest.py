@@ -4,34 +4,42 @@ import numpy as np
 
 from knn.kd_node import Node
 
-
-def initKdTree(allPoints, level, parent, m):
+# allPoints: 所有的训练数据
+# level: 根节点的level为1，越往叶子节点level越大
+# parent： 父节点
+# dividDim: 切分的轴
+def initKdTree(allPoints, level, parent, dividDim):
+    m = allPoints.shape[1]-1
     print("allPoints\n" + str(allPoints))
     curNode = Node(level, parent)
     if (allPoints.shape[0] == 1):
         data = allPoints[0]
-        curNode.point = data[:m - 1]
+        curNode.point = data[:-1]
         curNode.index = int(data[-1])
         return curNode
-
-    var = np.var(allPoints[:, :m - 1], axis=0)
-    dividDim = np.argsort(var)[var.shape[0] - 1]
+    #
+    # var = np.var(allPoints[:, :m - 1], axis=0)
+    # dividDim = np.argsort(var)[var.shape[0] - 1]
     curNode.dividDim = dividDim
     sort = np.argsort(allPoints, axis=0)[:, dividDim]
     l = int(len(sort) / 2)
     middleP = allPoints[sort[l], :]
-    curNode.point = middleP[:m - 1]
+    curNode.point = middleP[:-1]
     curNode.index = int(middleP[-1])
+    nextDividDim = dividDim+1
+    if(nextDividDim == m):
+        nextDividDim=0
+
 
     if (l > 0):
         leftIndex = sort[0:l]
         leftData = allPoints[leftIndex, :]
-        curNode.left = initKdTree(leftData, level + 1, curNode, m)
+        curNode.left = initKdTree(leftData, level + 1, curNode, nextDividDim)
 
     if (len(sort) > l + 1):
         rightIndex = sort[l + 1:]
         rightData = allPoints[rightIndex]
-        curNode.right = initKdTree(rightData, level + 1, curNode, m)
+        curNode.right = initKdTree(rightData, level + 1, curNode, nextDividDim)
     return curNode
 
 
@@ -48,15 +56,14 @@ def printNode(node):
 
 def getLeafNode(node, x):
     # node.dividDim==None 就是叶子节点
-    parent = None
     currNode = node
     while (currNode != None and currNode.dividDim != None):
-        parent = currNode
         point = currNode.point
+
         if (x[currNode.dividDim] > point[currNode.dividDim]):
-            currNode = currNode.right if currNode.right!=None else currNode.left
+            currNode = currNode.right if currNode.right != None else currNode.left
         else:
-            currNode = currNode.left if currNode.left!=None else currNode.right
+            currNode = currNode.left if currNode.left != None else currNode.right
     return currNode
 
 
@@ -202,7 +209,7 @@ if __name__ == '__main__':
     # node = Node(T, 1, head)
     # node.init()
     T = np.c_[T, np.arange(T.shape[0])]
-    head = initKdTree(T, 1, None, T.shape[1])
+    head = initKdTree(T, 1, None, 0)
     print(head)
     printNode(head)
     x = np.array([6.5, 1])
