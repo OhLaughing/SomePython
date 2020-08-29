@@ -14,12 +14,12 @@ if __name__ == '__main__':
     trainData = normDataset[100:, :]
     testData = normDataset[0:100, :]
     T = np.c_[trainData, np.arange(trainData.shape[0])]
-    tree = kd.initKdTree(T, 1, None, T.shape[1])
+    tree = kd.initKdTree(T, 1, None, 0)
     kd.printNode(tree)
 
     errorNum =0
     for i in range(len(testlabels)):
-        nearNodeList = kd.findkNearestNode(tree, testData[i, :], 5)
+        nearNodeList = kd.findkNearestNode(tree, testData[i, :], 3)
         nearestLabel = kd.getNearestLabel(nearNodeList, trainlabels)
         if(nearestLabel != testlabels[i]):
             errorNum+=1

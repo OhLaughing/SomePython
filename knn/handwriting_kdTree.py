@@ -3,23 +3,7 @@ from os import listdir
 import numpy as np
 
 import knn.kdTest as kd
-
-
-def img2vector(filename):
-    # 创建1*1024零向量
-    returnVect = np.zeros((1, 1024))
-    # 打开文件
-    fr = open(filename)
-    # 按行读取
-    for i in range(32):
-        # 读取一行数据
-        lineStr = fr.readline()
-        # 每一行的前32个数据依次存储到returnVect中
-        for j in range(32):
-            returnVect[0, 32 * i + j] = int(lineStr[j])
-    # 返回转换后的1*1024向量
-    return returnVect[0,:]
-
+import knn.utils as utils
 
 def getTrainData(path):
     hwLabels = []
@@ -38,15 +22,15 @@ def getTrainData(path):
         # 将获得的类别添加到hwLabels中
         hwLabels.append(classNumber)
         # 将每一个文件的1x1024数据存储到trainingMat矩阵中
-        trainingMat[i, :] = img2vector(path + '/%s' % (fileNameStr))
+        trainingMat[i, :] = utils.img2vector(path + '/%s' % (fileNameStr))
     return trainingMat, hwLabels
 
 
 if __name__ == '__main__':
-    path = r'D:\workspace\pdfd\机器学习实战\Machine-Learning-in-Action-Python3-master\kNN_Project2'
+    path = r'F:\workspace\pdf\机器学习实战\Machine-Learning-in-Action-Python3-master\kNN_Project2'
     trainData, trainLabels = getTrainData(path + '\\trainingDigits')
     T = np.c_[trainData, np.arange(trainData.shape[0])]
-    tree = kd.initKdTree(T, 1, None, T.shape[1])
+    tree = kd.initKdTree(T, 1, None, 0)
 
     testFileList = listdir(path + '\\testDigits')
     # 错误检测计数
@@ -59,7 +43,7 @@ if __name__ == '__main__':
         fileNameStr = testFileList[i]
         classNumber = int(fileNameStr.split('_')[0])
         # 获得测试集的1*1024向量，用于训练
-        vectorUnderTest = img2vector(path + '/testDigits/%s' % (fileNameStr))
+        vectorUnderTest = utils.img2vector(path + '/testDigits/%s' % (fileNameStr))
 
 
         knearestList = kd.findkNearestNode(tree, vectorUnderTest, 4)
