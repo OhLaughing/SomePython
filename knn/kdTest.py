@@ -151,7 +151,6 @@ class NodeDistant:
 
 
 def findkNearestNode(nearestkNodeList, node, x, k):
-    print('currentNode: ' + str(node))
     # 先找到叶子节点
     leafNode = getLeafNode(node, x)
     # 此时，最近的点，及最近距离指的是，k个中距离最大的那个

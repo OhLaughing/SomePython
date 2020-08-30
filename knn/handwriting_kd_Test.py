@@ -9,7 +9,7 @@ import knn.utils as utils
 
 class Test(TestCase):
     def test_init_kd_tree(self):
-        path = r'D:\workspace\pdfd\machineLeanringInAction\Machine-Learning-in-Action-Python3-master\kNN_Project2'
+        path = r'F:\workspace\pdf\机器学习实战\Machine-Learning-in-Action-Python3-master\kNN_Project2'
         trainData, trainLabels = hand.getTrainData(path + '\\trainingDigits')
         T = np.c_[trainData, np.arange(trainData.shape[0])]
         tree = kd.initKdTree(T, 1, None, 0)
