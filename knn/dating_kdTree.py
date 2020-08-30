@@ -19,8 +19,9 @@ if __name__ == '__main__':
 
     errorNum =0
     for i in range(len(testlabels)):
-        nearNodeList = kd.findkNearestNode(tree, testData[i, :], 3)
-        nearestLabel = kd.getNearestLabel(nearNodeList, trainlabels)
+        nearestkNodeList = []
+        kd.findkNearestNode(nearestkNodeList, tree, testData[i, :], 3)
+        nearestLabel = kd.getNearestLabel(nearestkNodeList, trainlabels)
         if(nearestLabel != testlabels[i]):
             errorNum+=1
 

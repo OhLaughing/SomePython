@@ -27,5 +27,5 @@ class Node:
         print(dividDim)
 
     def __str__(self):
-        return 'point:{}-level:{}-divide dimension:{}-index:{}'.format(self.point, self.level, self.dividDim,
+        return 'point:{}-level:[{}]-divide dimension:[{}]-index:[{}]'.format(self.point, self.level, self.dividDim,
                                                                        self.index)

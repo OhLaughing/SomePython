@@ -2,14 +2,16 @@ import operator
 
 import numpy as np
 
-from knn.kd_node import Node
 import knn.utils as utils
+from knn.kd_node import Node
+
+
 # allPoints: 所有的训练数据
 # level: 根节点的level为1，越往叶子节点level越大
 # parent： 父节点
 # dividDim: 切分的轴
 def initKdTree(allPoints, level, parent, dividDim):
-    m = allPoints.shape[1]-1
+    m = allPoints.shape[1] - 1
     curNode = Node(level, parent)
     if (allPoints.shape[0] == 1):
         data = allPoints[0]
@@ -25,10 +27,9 @@ def initKdTree(allPoints, level, parent, dividDim):
     middleP = allPoints[sort[l], :]
     curNode.point = middleP[:-1]
     curNode.index = int(middleP[-1])
-    nextDividDim = dividDim+1
-    if(nextDividDim == m):
-        nextDividDim=0
-
+    nextDividDim = dividDim + 1
+    if (nextDividDim == m):
+        nextDividDim = 0
 
     if (l > 0):
         leftIndex = sort[0:l]
@@ -66,7 +67,6 @@ def getLeafNode(node, x):
     return currNode
 
 
-
 # 该方法用在从兄弟节点到叶子节点，找到是否有离目标点更近的
 def findToLeaf(node, x, nearestNode, nearestDistant):
     while (node != None):
@@ -93,7 +93,9 @@ def insertToList(nearestkNodeList, nodeDistant):
 
 
 def findToLeaf_k(node, x, nearestkNodeList, k):
-    while (node != None):
+    head = node
+    current = getLeafNode(head, x)
+    while (current != head):
         distant = utils.getDistant(node.point, x)
         if (len(nearestkNodeList) < k):
             insertToList(nearestkNodeList, NodeDistant(node, distant))
@@ -106,9 +108,9 @@ def findToLeaf_k(node, x, nearestkNodeList, k):
         if (dim == None):
             node = None
         elif (x[dim] > node.point[dim]):
-            node = node.right
+            node = node.right if node.right != None else node.left
         else:
-            node = node.left
+            node = node.left if node.left != None else node.right
 
 
 def findNearestNode(node, x):
@@ -145,28 +147,35 @@ class NodeDistant:
         self.distant = distant
 
     def __str__(self):
-        return '{}-{}'.format(self.node, self.distant)
+        return '{}-distant: {}'.format(self.node, self.distant)
 
 
-def findkNearestNode(node, x, k):
-    assert k > 0
-    nearestkNodeList = []
+def findkNearestNode(nearestkNodeList, node, x, k):
+    print('currentNode: ' + str(node))
     # 先找到叶子节点
     leafNode = getLeafNode(node, x)
     # 此时，最近的点，及最近距离指的是，k个中距离最大的那个
     currentNode = leafNode
-    nearestDistant = utils.getDistant(leafNode.point, x)
-    nearestkNodeList.append(NodeDistant(currentNode, nearestDistant))
+    distant = utils.getDistant(leafNode.point, x)
 
-    print(nearestDistant)
+    if len(nearestkNodeList) < k:
+        insertToList(nearestkNodeList, NodeDistant(currentNode, distant))
+    elif distant < nearestkNodeList[0].distant:
+        assert len(nearestkNodeList) == k
+        nearestkNodeList.remove(nearestkNodeList[0])
+        insertToList(nearestkNodeList, NodeDistant(currentNode, distant))
+
     parentNode = leafNode.parent
-    while parentNode != None:
+    while currentNode != node:
         parentDividDim = parentNode.dividDim
         # 以x为中心，以当时找到的最近距离为半径做圆，查看该圆是否与父节点的分隔线有相交
-        if nearestDistant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim]) or len(nearestkNodeList) < k:
+        if nearestkNodeList[0].distant > np.abs(parentNode.point[parentDividDim] - x[parentDividDim]) or len(
+                nearestkNodeList) < k:
             # 从兄弟节点开始
             siblingNode = parentNode.left if currentNode == parentNode.right else parentNode.right
-            findToLeaf_k(siblingNode, x, nearestkNodeList, k)
+            if (siblingNode != None):
+                findkNearestNode(nearestkNodeList, siblingNode, x, k)
+                # findToLeaf_k(siblingNode, x, nearestkNodeList, k)
 
         disTant2 = utils.getDistant(parentNode.point, x)
 

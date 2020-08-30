@@ -45,9 +45,9 @@ if __name__ == '__main__':
         # 获得测试集的1*1024向量，用于训练
         vectorUnderTest = utils.img2vector(path + '/testDigits/%s' % (fileNameStr))
 
-
-        knearestList = kd.findkNearestNode(tree, vectorUnderTest, 4)
-        theLabel = kd.getNearestLabel(knearestList, trainLabels)
+        nearestkNodeList = []
+        kd.findkNearestNode(nearestkNodeList,tree, vectorUnderTest, 4)
+        theLabel = kd.getNearestLabel(nearestkNodeList, trainLabels)
 
         if (classNumber != theLabel):
             errorCount += 1
