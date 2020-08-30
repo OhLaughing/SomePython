@@ -46,7 +46,7 @@ if __name__ == '__main__':
         vectorUnderTest = utils.img2vector(path + '/testDigits/%s' % (fileNameStr))
 
         nearestkNodeList = []
-        kd.findkNearestNode(nearestkNodeList,tree, vectorUnderTest, 4)
+        kd.findkNearestNode(nearestkNodeList,tree, vectorUnderTest, 3)
         theLabel = kd.getNearestLabel(nearestkNodeList, trainLabels)
 
         if (classNumber != theLabel):
