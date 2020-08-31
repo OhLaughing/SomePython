@@ -3,6 +3,8 @@
   机器学习连接：https://www.cnblogs.com/aabbcc/p/8683042.html
 - 【数学】拉格朗日对偶，从0到完全理解：https://blog.csdn.net/frostime/article/details/90291392
 - global set value
+- 机器学习撸一遍：https://www.zhihu.com/question/326770694/answer/715217571
+
 ```python
 x = 1
 y = 2
