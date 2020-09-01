@@ -5,6 +5,9 @@
 - global set value
 - 机器学习撸一遍：https://www.zhihu.com/question/326770694/answer/715217571
 
+## 链接
+- the matrix cookbook[http://www2.imm.dtu.dk/pubdb/edoc/imm3274.pdf]
+
 ```python
 x = 1
 y = 2
