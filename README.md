@@ -52,8 +52,9 @@ sorted(students, key=operator.itemgetter(1,2)) # 根据第二个和第三个值�
 然后 执行ex2.test1() 即可调用test1()方法
 - 神经网络基础[https://www.cnblogs.com/maybe2030/p/5597716.html]
 
-## paper
+## paper书籍
 - A practical guide to SVM classification 
+《DEEP LEARNING》《机器学习-周志华》《统计学习方法-李航》《机器学习实战》《利用Python进行数据分析》
 
 ## 学习记录
 - 20200817： 前段时间一直在看吴恩达的机器学习课程，共8课，看到第4课神经网络，还没能自己通过反向传播来实现把例子的，手写数字识别，代码中不知道哪里还有些问题，昨天看了《机器学习实战》的knn算法，还没看完
