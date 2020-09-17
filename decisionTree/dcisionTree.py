@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 from decisionTree.DecisionTree import createPlot
-from decisionTree.watermelon import getData
+from decisionTree.watermelon import getWatermelonData
 
 
 def getEnt(data, totalnum):
@@ -119,23 +119,23 @@ def getLargestNum(numDict):
     return index
 
 
-def initDecisionTree(data, labels, attrIndexList, dataIndexList):
-    print("attrIndexList: {}".format(attrIndexList))
+def initDecisionTree(data, labels, featureList, dataIndexList):
+    print("attrIndexList: {}".format(featureList))
     print("dataIndexList: {}".format(dataIndexList))
     numDict = getValueNum(labels, dataIndexList)
     if len(numDict) == 1:
         return labels[dataIndexList[0]]
-    if len(attrIndexList) == 1:
+    if len(featureList) == 1:
         return getLargestNum(numDict)
     ent = entropy(labels, dataIndexList)
     info_gains = {}
-    for i in attrIndexList:
-        each_ent, each_num = information_entropy(data[:, i], labels, indexList)
+    for i in featureList:
+        each_ent, each_num = information_entropy(data[i], labels, indexList)
         info_gain = information_gain(ent, each_ent, each_num)
         info_gains[i] = info_gain
     print(info_gains)
     bestAttr = getBestAttr(info_gains)
-    otherAttrs = otherAttrList(attrIndexList, bestAttr)
+    otherAttrs = otherAttrList(featureList, bestAttr)
     subIndex = getSubIndex(data[:, bestAttr], dataIndexList)
     nextTree = {}
 
@@ -145,7 +145,7 @@ def initDecisionTree(data, labels, attrIndexList, dataIndexList):
     return {bestAttr: nextTree}
 
 
-data, labels, attr_cn, allRelations = getData()
+data, labels, features = getWatermelonData()
 
 if __name__ == '__main__':
     print(data)
@@ -154,6 +154,6 @@ if __name__ == '__main__':
     ent = entropy(labels, indexList)
     print(ent)
     info_gains = []
-    tree = initDecisionTree(data, labels, range(data.shape[1]), range(data.shape[0]))
+    tree = initDecisionTree(data, labels, range(len(features)), range(len(labels)))
     print(tree)
     createPlot(tree)

@@ -11,7 +11,27 @@ def handlerRowData(allRelations, returnData, i, rowData):
         row[i] = allRelations[i][curr]
     return row
 
-def getData():
+# 获取源数据，都转换为数字
+def getWatermelonData():
+    file = 'watermelon_data2.txt'
+
+    f = open(file, 'r', encoding='utf-8')
+    arrayOlines = f.readlines()
+    numberOfLines = len(arrayOlines)
+    print(arrayOlines[0])
+    features = arrayOlines[0].strip().split(',')[1:-1]
+    print(features)
+    returnData = []
+    labels =[]
+
+    print(numberOfLines)
+    for i in range(numberOfLines - 1):
+        row = arrayOlines[i + 1].strip().split(',')
+        returnData.append(row[1:-1])
+        labels.append(row[-1])
+    return returnData, labels, features
+
+def getWatermelonDigitalData():
     file = 'watermelon_data2.txt'
 
     f = open(file, 'r', encoding='utf-8')
@@ -36,8 +56,11 @@ def getData():
     returnData = returnData[:,0:-1]
     return returnData, labels, attr_cn, allRelations
 
+
 if __name__ == '__main__':
 
-    returnData, labels = getData()
+    returnData, labels ,features = getWatermelonData()
+    print(len(returnData))
     print(returnData)
     print(labels)
+    print(features)
