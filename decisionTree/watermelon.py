@@ -31,12 +31,13 @@ def getData():
         row = arrayOlines[i + 1].strip().split(',')
         rowData = handlerRowData(allRelations,returnData,i, row[1:])
         returnData[i, :] = rowData
-
+    attr_cn = arrayOlines[0].strip().split(',')[1:]
     labels = returnData[:,-1]
     returnData = returnData[:,0:-1]
-    return returnData, labels
+    return returnData, labels, attr_cn, allRelations
 
+if __name__ == '__main__':
 
-returnData, labels = getData()
-print(returnData)
-print(labels)
+    returnData, labels = getData()
+    print(returnData)
+    print(labels)

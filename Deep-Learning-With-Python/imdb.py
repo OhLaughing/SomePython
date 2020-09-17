@@ -9,4 +9,3 @@ if __name__ == '__main__':
     model.compile(optimizer=optimizers.RMSprop(lr=0.001),
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
-    

@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 
+from decisionTree.DecisionTree import createPlot
 from decisionTree.watermelon import getData
 
 
@@ -20,6 +21,7 @@ def entropy(labels, indexList):
             classification[labels[i]] += 1.0
         else:
             classification[labels[i]] = 1.0
+    print("indexList: {}".format(indexList))
 
     ent = getEnt(classification, len(indexList))
     return ent
@@ -72,7 +74,7 @@ def information_gain(ent, each_ent, each_num):
 def getBestAttr(info_gains):
     bigest = -1.0
     index = -1
-    for k, v in info_gains:
+    for k, v in info_gains.items():
         if v > bigest:
             bigest = v
             index = k
@@ -118,6 +120,8 @@ def getLargestNum(numDict):
 
 
 def initDecisionTree(data, labels, attrIndexList, dataIndexList):
+    print("attrIndexList: {}".format(attrIndexList))
+    print("dataIndexList: {}".format(dataIndexList))
     numDict = getValueNum(labels, dataIndexList)
     if len(numDict) == 1:
         return labels[dataIndexList[0]]
@@ -134,13 +138,16 @@ def initDecisionTree(data, labels, attrIndexList, dataIndexList):
     otherAttrs = otherAttrList(attrIndexList, bestAttr)
     subIndex = getSubIndex(data[:, bestAttr], dataIndexList)
     nextTree = {}
-    for value, index in subIndex.items():
-        nextTree[value] = initDecisionTree(data, labels, otherAttrs, index)
-    return dict(bestAttr=nextTree)
 
+    for value, index in subIndex.items():
+        if len(index) > 0:
+            nextTree[value] = initDecisionTree(data, labels, otherAttrs, index)
+    return {bestAttr: nextTree}
+
+
+data, labels, attr_cn, allRelations = getData()
 
 if __name__ == '__main__':
-    data, labels = getData()
     print(data)
     print(labels)
     indexList = np.arange(len(labels))
@@ -149,3 +156,4 @@ if __name__ == '__main__':
     info_gains = []
     tree = initDecisionTree(data, labels, range(data.shape[1]), range(data.shape[0]))
     print(tree)
+    createPlot(tree)
