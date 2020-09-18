@@ -430,7 +430,7 @@ def plotTree(myTree, parentPt, nodeTxt, allrelations, features):
         # 如果是叶结点，绘制叶结点，并标注有向边属性值
         else:
             plotTree.xoff = plotTree.xoff + 1.0 / plotTree.totalW
-            plotNode(secondDict[key], (plotTree.xoff, plotTree.yoff), cntrPt, leafNode)
+            plotNode(allrelations[-1][secondDict[key]], (plotTree.xoff, plotTree.yoff), cntrPt, leafNode)
             plotMidText((plotTree.xoff, plotTree.yoff), cntrPt,  allrelations[index][int(key)])
     plotTree.yoff = plotTree.yoff + 1.0 / plotTree.totalD
 
