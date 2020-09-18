@@ -1,7 +1,5 @@
 import math
 
-import numpy as np
-
 from decisionTree.DecisionTree import createPlot
 from decisionTree.watermelon import *
 
@@ -62,7 +60,7 @@ def information_entropy(properties, labels, indexList):
 
     return each_ent, each_num
 
-
+# ID3决策树采用信息增益来选择最优属性
 def information_gain(ent, each_ent, each_num):
     sum1 = sum(each_num)
     s = 0.0
@@ -87,7 +85,7 @@ def getSubIndex(theAttrList, dataIndexList):
         if theAttrList[i] in t:
             t[theAttrList[i]].append(i)
         else:
-            t[theAttrList[i]] = []
+            t[theAttrList[i]] = [i]
     return t
 
 
@@ -130,7 +128,7 @@ def initDecisionTree(data, labels, featureList, dataIndexList):
     ent = entropy(labels, dataIndexList)
     info_gains = {}
     for i in featureList:
-        each_ent, each_num = information_entropy(data[:,i], labels, indexList)
+        each_ent, each_num = information_entropy(data[:, i], labels, dataIndexList)
         info_gain = information_gain(ent, each_ent, each_num)
         info_gains[i] = info_gain
     print(info_gains)
@@ -140,19 +138,21 @@ def initDecisionTree(data, labels, featureList, dataIndexList):
     nextTree = {}
 
     for value, index in subIndex.items():
-        if len(index) > 0:
-            nextTree[value] = initDecisionTree(data, labels, otherAttrs, index)
+        # if len(index) > 0:
+        nextTree[value] = initDecisionTree(data, labels, otherAttrs, index)
     return {int(bestAttr): nextTree}
+
 
 def getAllRelations(relations):
     returnRelations = []
     for i in range(len(relations)):
         a = relations[i]
         tmpDict = {}
-        for k,v in a.items():
+        for k, v in a.items():
             tmpDict[int(v)] = k
         returnRelations.append(tmpDict)
     return returnRelations
+
 
 data, labels, features = getWatermelonData()
 returnData, labels1, attr_cn, allRelations = getWatermelonDigitalData()
@@ -166,6 +166,6 @@ if __name__ == '__main__':
     print(type(allRelations[0]))
     print(ent)
     info_gains = []
-    tree = initDecisionTree(returnData, labels1, range(len(features)), range(len(labels)))
+    tree = initDecisionTree(returnData, labels1, list(range(len(features))), list(range(len(labels))))
     print(tree)
     createPlot(tree, allRelations, features)
