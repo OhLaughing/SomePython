@@ -8,7 +8,8 @@
 ## 链接
 - the matrix cookbook[http://www2.imm.dtu.dk/pubdb/edoc/imm3274.pdf]
 - 深度学习书籍推荐：https://zhuanlan.zhihu.com/p/84920970
-《神经网络与深度学习》：https://tigerneil.gitbooks.io/neural-networks-and-deep-learning-zh/content/
+-《神经网络与深度学习》：https://tigerneil.gitbooks.io/neural-networks-and-deep-learning-zh/content/
+- scikit learn 初探35题，matplotlib50题，pandas 50题：https://zhuanlan.zhihu.com/p/97977032
 ```python
 x = 1
 y = 2
