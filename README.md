@@ -15,6 +15,7 @@ x = 1
 y = 2
 x, y = swap(x, y)     # => x = 2, y = 1
 # (x, y) = swap(x,y)  # Again parenthesis have been excluded but can be included.
+# python中with的作用 : https://zhuanlan.zhihu.com/p/158100802
 
 # Function Scope
 x = 5
