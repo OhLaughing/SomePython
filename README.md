@@ -36,6 +36,7 @@ set_global_x(6)
 ```
 - python命令，who和whos可以查看所有变量，以及变量的信息，利用del命令可以删除变量的定义
 - 会利用 for a in b
+- python3中/表示浮点数除法，//表示整数除法
 ```python
 L = list(range(10))
 L2 = [str(c) for c in L]
