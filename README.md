@@ -10,6 +10,7 @@
 - 深度学习书籍推荐：https://zhuanlan.zhihu.com/p/84920970
 -《神经网络与深度学习》：https://tigerneil.gitbooks.io/neural-networks-and-deep-learning-zh/content/
 - scikit learn 初探35题，matplotlib50题，pandas 50题：https://zhuanlan.zhihu.com/p/97977032
+- 深度学习四大名著之《Scikit-Learn、Keras与TensorFlow机器学习实用指南（第二版）》 https://www.jianshu.com/p/4a94798f7dcc
 ```python
 x = 1
 y = 2
