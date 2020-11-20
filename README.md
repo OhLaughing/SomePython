@@ -6,13 +6,14 @@
 - 机器学习撸一遍：https://www.zhihu.com/question/326770694/answer/715217571
 
 ## 链接
-- the matrix cookbook[http://www2.imm.dtu.dk/pubdb/edoc/imm3274.pdf]
+- [the matrix cookbook](http://www2.imm.dtu.dk/pubdb/edoc/imm3274.pdf)
 - 深度学习书籍推荐：https://zhuanlan.zhihu.com/p/84920970
 -《神经网络与深度学习》：https://tigerneil.gitbooks.io/neural-networks-and-deep-learning-zh/content/
 - scikit learn 初探35题，matplotlib50题，pandas 50题：https://zhuanlan.zhihu.com/p/97977032
 - 深度学习四大名著之《Scikit-Learn、Keras与TensorFlow机器学习实用指南（第二版）》 https://www.jianshu.com/p/4a94798f7dcc
-- https://keras.io/examples/
-- https://tensorflow.google.cn/tutorials/keras/classification
+- [keras官方example](https://keras.io/examples/)
+- [keras中文文档](https://keras-cn.readthedocs.io/en/latest/)
+- <https://tensorflow.google.cn/tutorials/keras/classification>
 ```python
 x = 1
 y = 2
