@@ -1,0 +1,1 @@
+cross_val_score交叉验证的原理，参考cross_val_score_demo
