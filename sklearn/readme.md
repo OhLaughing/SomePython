@@ -1,1 +1,2 @@
 cross_val_score交叉验证的原理，参考cross_val_score_demo
+plot_digits 把sklearn的digits手写数据集打印显示
